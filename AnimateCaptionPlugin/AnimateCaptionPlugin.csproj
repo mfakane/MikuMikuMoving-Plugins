@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6B0640C1-7BC7-4C6D-BAD5-354E6B5DD2A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Linearstar.MikuMikuMoving.AnimateCaptionPlugin</RootNamespace>
+    <AssemblyName>AnimateCaptionPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DxMath">
+      <HintPath>X:\mmd\tools\MikuMikuMoving\System\DxMath.dll</HintPath>
+    </Reference>
+    <Reference Include="MikuMikuPlugin">
+      <HintPath>X:\mmd\tools\MikuMikuMoving\System\MikuMikuPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\MotionUtil\Framework\FinallyBlock.cs">
+      <Link>Framework\FinallyBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\Hacking\CaptionEx.cs">
+      <Link>Framework\CaptionEx.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\MathHelper.cs">
+      <Link>Framework\MathHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\PluginBase.cs">
+      <Link>Framework\PluginBase.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\ResidentBase.cs">
+      <Link>Framework\ResidentBase.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\UndoBlock.cs">
+      <Link>Framework\UndoBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\Util.cs">
+      <Link>Framework\Util.cs</Link>
+    </Compile>
+    <Compile Include="AmountEventArgs.cs" />
+    <Compile Include="AnimateCaptionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnimateCaptionControl.Designer.cs">
+      <DependentUpon>AnimateCaptionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnimateCaptionPlugin.cs" />
+    <Compile Include="AnimationData.cs" />
+    <Compile Include="AnimationEntryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnimationEntryControl.Designer.cs">
+      <DependentUpon>AnimationEntryControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnimationEntry.cs" />
+    <Compile Include="AnimationFrame.cs" />
+    <Compile Include="AnimationMode.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimelineControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TimelineControl.Designer.cs">
+      <DependentUpon>TimelineControl.cs</DependentUpon>
+    </Compile>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AnimateCaptionControl.resx">
+      <DependentUpon>AnimateCaptionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AnimationEntryControl.resx">
+      <DependentUpon>AnimationEntryControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimelineControl.resx">
+      <DependentUpon>TimelineControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AnimateCaptionPlugin32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AnimateCaptionPlugin20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AnimateCaptionPlugin.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>$(SolutionDir)MMMInstallPlugin $(TargetPath)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

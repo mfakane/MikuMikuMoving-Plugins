@@ -1,0 +1,30 @@
+﻿フレーム時間反転プラグイン
+RevertFramesPlugin.dll
+
+◆概要
+選択されたキーフレームを時間軸方向に反転します。
+
+本ファイルは MikuMikuMoving 1.1.2.0 用のコマンドプラグインです。
+MikuMikuMoving については、以下の URL をご参照ください。
+http://sites.google.com/site/mikumikumoving/
+
+
+◆インストール
+MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を入れてください。
+削除するときはそれを削除するだけで良いです。
+
+
+◆注意
+・ボーンまたはモーフのキーフレームのみ反転されます。
+　カメラの場合、カメラモーションのみが反転されます。照明は含まれません。
+
+
+◆更新履歴
+
+Version 0.0, Thu, 04 Oct 2012
+
+	製作
+
+
+----
+ミーフォ茜 <star@glasscore.net>

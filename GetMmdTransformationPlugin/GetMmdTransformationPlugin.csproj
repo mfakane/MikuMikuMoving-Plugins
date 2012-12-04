@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{28C06CEA-335F-4B52-BDBC-8DBD7DBA9FBE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Linearstar.MikuMikuMoving.GetMmdTransformationPlugin</RootNamespace>
+    <AssemblyName>GetMmdTransformationPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DxMath">
+      <HintPath>X:\mmd\tools\MikuMikuMoving\System\DxMath.dll</HintPath>
+    </Reference>
+    <Reference Include="MikuMikuPlugin">
+      <HintPath>X:\mmd\tools\MikuMikuMoving\System\MikuMikuPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\MotionUtil\Framework\CommandBase.cs">
+      <Link>Framework\CommandBase.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\PluginBase.cs">
+      <Link>Framework\PluginBase.cs</Link>
+    </Compile>
+    <Compile Include="..\MotionUtil\Framework\Util.cs">
+      <Link>Framework\Util.cs</Link>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Content Include="GetMmdTransformationPlugin.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="Mmd\MmdBone.cs" />
+    <Compile Include="Mmd\MmdImport.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MmdImport.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Mmd\MmdMatrix.cs" />
+    <Compile Include="Mmd\MmdModel.cs" />
+    <Compile Include="Mmd\MmdMorph.cs" />
+    <Compile Include="GetMmdTransformationCommand.cs" />
+    <Compile Include="Mmd\MmdImport.cs" />
+    <Compile Include="GetMmdTransformationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetMmdTransformationForm.Designer.cs">
+      <DependentUpon>GetMmdTransformationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Mmd\MmdPipeProtocol.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Resources\GetMmdTransformation20.png" />
+    <Content Include="Resources\GetMmdTransformation32.png" />
+    <None Include="Resources\GetMmdTransformationProxy64.dll" />
+    <None Include="Resources\GetMmdTransformationContainer64.exe" />
+    <None Include="Resources\GetMmdTransformationProxy.dll" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mmd\MmdImport.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MmdImport.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GetMmdTransformationForm.resx">
+      <DependentUpon>GetMmdTransformationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>$(SolutionDir)MMMInstallPlugin $(TargetPath)</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
