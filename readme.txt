@@ -19,6 +19,12 @@ MikuMikuMoving 向けのプラグインです。
 * RevertFramesPlugin			: フレーム時間反転
 * SetMmdTransformationPlugin	: MMD ポーズ設定
 
+ビルド
+=====
+
+MMMInstallPlugin.bat を開き、MMM のプラグインフォルダを設定してください。
+ビルド時に出力アセンブリがそのフォルダへコピーされます。
+
 
 ライセンス
 =========
