@@ -32,7 +32,7 @@ namespace Linearstar.MikuMikuMoving.DetailedTimePlugin
 			if (!(image.Visible = this.Scene.State != SceneState.AVI_Rendering))
 				return;
 
-			var text = GetStatusText((long)frame);
+			var text = GetStatusText(frame == 0 ? this.Scene.MarkerPosition : (long)frame);
 
 			if (text != previousText)
 			{
