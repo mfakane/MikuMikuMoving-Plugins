@@ -23,6 +23,9 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 
 		public override void Update(float frame, float elapsedTime)
 		{
+			if (frame == 0)
+				frame = this.Scene.MarkerPosition;
+
 			foreach (var i in datas.Keys.Except(this.Scene.Captions.Select(_ => _.GetRealCaption())).ToArray())
 				datas.Remove(i);
 
