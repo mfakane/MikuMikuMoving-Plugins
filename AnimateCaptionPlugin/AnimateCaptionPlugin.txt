@@ -57,6 +57,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
+Version 0.1, Sat, 06 Dec 2012
+
+	編集時に正しくアニメーションしないのを修正
+
 Version 0.0, Sat, 18 Aug 2012
 
 	製作

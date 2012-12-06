@@ -26,6 +26,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
+Version 0.2, Sat, 06 Dec 2012
+
+	編集時に正しく計算されないのを修正
+
 Version 0.1, Mon, 03 Sep 2012
 
 	再生中にも表示するように (出力時は表示されません)
