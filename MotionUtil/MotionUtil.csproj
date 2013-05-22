@@ -52,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\CommandBase.cs" />
+    <Compile Include="Framework\Controls\IncrementSelectionNumericUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Framework\EnableScreenObjectBlock.cs" />
     <Compile Include="Framework\FinallyBlock.cs" />
     <Compile Include="Framework\Hacking\BoneEx.cs" />

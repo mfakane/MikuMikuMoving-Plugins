@@ -38,6 +38,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
+Version 0.5, Wed, 22 May 2013
+
+	数値ボックスの上下ボタンを押したとき選択している桁を操作するように
+
 Version 0.4, Fri, 05 Oct 2012
 
 	親ボーンが変形されている場合回転が正しくないのを修正

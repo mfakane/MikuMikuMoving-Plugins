@@ -51,6 +51,10 @@
     <Compile Include="..\MotionUtil\Framework\CommandBase.cs">
       <Link>Framework\CommandBase.cs</Link>
     </Compile>
+    <Compile Include="..\MotionUtil\Framework\Controls\IncrementSelectionNumericUpDown.cs">
+      <Link>Framework\Controls\IncrementSelectionNumericUpDown.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="..\MotionUtil\Framework\MathHelper.cs">
       <Link>Framework\MathHelper.cs</Link>
     </Compile>

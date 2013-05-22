@@ -48,6 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MotionUtil\Framework\Controls\IncrementSelectionNumericUpDown.cs">
+      <Link>Framework\Controls\IncrementSelectionNumericUpDown.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="..\MotionUtil\Framework\FinallyBlock.cs">
       <Link>Framework\FinallyBlock.cs</Link>
     </Compile>

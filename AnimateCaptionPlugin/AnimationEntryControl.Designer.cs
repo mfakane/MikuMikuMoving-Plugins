@@ -30,10 +30,10 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.endNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.endNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
 			this.endTrackBar = new System.Windows.Forms.TrackBar();
 			this.beginTrackBar = new System.Windows.Forms.TrackBar();
-			this.beginNumericUpDown = new System.Windows.Forms.NumericUpDown();
+			this.beginNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
 			this.switchButton = new System.Windows.Forms.Button();
 			this.modeContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.noneMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -280,10 +280,10 @@
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.NumericUpDown endNumericUpDown;
+		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown endNumericUpDown;
 		private System.Windows.Forms.TrackBar endTrackBar;
 		private System.Windows.Forms.TrackBar beginTrackBar;
-		private System.Windows.Forms.NumericUpDown beginNumericUpDown;
+		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown beginNumericUpDown;
 		private System.Windows.Forms.Button switchButton;
 		private System.Windows.Forms.ContextMenuStrip modeContextMenuStrip;
 		private System.Windows.Forms.ToolStripMenuItem linearInterpolationMenuItem;

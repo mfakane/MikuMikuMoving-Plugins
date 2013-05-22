@@ -57,6 +57,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
+Version 0.2, Wed, 22 May 2013
+
+	数値ボックスの上下ボタンを押したとき選択している桁を操作するように
+
 Version 0.1, Sat, 06 Dec 2012
 
 	編集時に正しくアニメーションしないのを修正
