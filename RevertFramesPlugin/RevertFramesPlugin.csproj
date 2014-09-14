@@ -48,9 +48,6 @@
     <Compile Include="..\MotionUtil\Framework\CommandBase.cs">
       <Link>Framework\CommandBase.cs</Link>
     </Compile>
-    <Compile Include="..\MotionUtil\Framework\MathHelper.cs">
-      <Link>Framework\MathHelper.cs</Link>
-    </Compile>
     <Compile Include="..\MotionUtil\Framework\PluginBase.cs">
       <Link>Framework\PluginBase.cs</Link>
     </Compile>

@@ -49,12 +49,6 @@
     <Compile Include="..\MotionUtil\Framework\CommandBase.cs">
       <Link>Framework\CommandBase.cs</Link>
     </Compile>
-    <Compile Include="..\MotionUtil\Framework\Hacking\MotionFrameCollectionEx.cs">
-      <Link>Framework\Hacking\MotionFrameCollectionEx.cs</Link>
-    </Compile>
-    <Compile Include="..\MotionUtil\Framework\Hacking\SlimDX.cs">
-      <Link>Framework\Hacking\SlimDX.cs</Link>
-    </Compile>
     <Compile Include="..\MotionUtil\Framework\MathHelper.cs">
       <Link>Framework\MathHelper.cs</Link>
     </Compile>

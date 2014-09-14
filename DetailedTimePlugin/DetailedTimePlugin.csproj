@@ -47,17 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MotionUtil\Framework\MathHelper.cs">
-      <Link>Framework\MathHelper.cs</Link>
-    </Compile>
     <Compile Include="..\MotionUtil\Framework\PluginBase.cs">
       <Link>Framework\PluginBase.cs</Link>
     </Compile>
     <Compile Include="..\MotionUtil\Framework\ResidentBase.cs">
       <Link>Framework\ResidentBase.cs</Link>
-    </Compile>
-    <Compile Include="..\MotionUtil\Framework\UndoBlock.cs">
-      <Link>Framework\UndoBlock.cs</Link>
     </Compile>
     <Compile Include="..\MotionUtil\Framework\Util.cs">
       <Link>Framework\Util.cs</Link>
