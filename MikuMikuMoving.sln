@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionUtil", "MotionUtil\MotionUtil.csproj", "{D7632895-7A65-4BDD-9788-AF42DB82CC07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplyOffsetPlugin", "ApplyOffsetPlugin\ApplyOffsetPlugin.csproj", "{E31B8BEC-E8F8-4513-9ADC-43AE641F1A7F}"
