@@ -55,9 +55,6 @@
     <Compile Include="..\MotionUtil\Framework\FinallyBlock.cs">
       <Link>Framework\FinallyBlock.cs</Link>
     </Compile>
-    <Compile Include="..\MotionUtil\Framework\Hacking\CaptionEx.cs">
-      <Link>Framework\CaptionEx.cs</Link>
-    </Compile>
     <Compile Include="..\MotionUtil\Framework\MathHelper.cs">
       <Link>Framework\MathHelper.cs</Link>
     </Compile>

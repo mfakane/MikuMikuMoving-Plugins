@@ -57,13 +57,6 @@
     </Compile>
     <Compile Include="Framework\EnableScreenObjectBlock.cs" />
     <Compile Include="Framework\FinallyBlock.cs" />
-    <Compile Include="Framework\Hacking\BoneEx.cs" />
-    <Compile Include="Framework\Hacking\CaptionEx.cs" />
-    <Compile Include="Framework\Hacking\IK.cs" />
-    <Compile Include="Framework\Hacking\IKLink.cs" />
-    <Compile Include="Framework\Hacking\MorphEx.cs" />
-    <Compile Include="Framework\Hacking\MotionFrameCollectionEx.cs" />
-    <Compile Include="Framework\Hacking\SlimDX.cs" />
     <Compile Include="Framework\Lazy.cs" />
     <Compile Include="Framework\MathHelper.cs" />
     <Compile Include="Framework\PluginBase.cs" />

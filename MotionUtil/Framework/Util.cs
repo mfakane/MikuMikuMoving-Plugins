@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 
 namespace Linearstar.MikuMikuMoving.Framework
 {
@@ -45,32 +43,6 @@ namespace Linearstar.MikuMikuMoving.Framework
 		public static string Bilingual(string lang, string ja, string en)
 		{
 			return IsEnglish(lang) ? en : ja;
-		}
-
-		public static object Member(this object self, string name, params object[] args)
-		{
-			var m = self.GetType().GetMember(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).FirstOrDefault();
-
-			if (m is MethodInfo)
-				return ((MethodInfo)m).Invoke(self, args);
-			else if (m is PropertyInfo)
-				return ((PropertyInfo)m).GetValue(self, args);
-			else if (m is FieldInfo)
-				return ((FieldInfo)m).GetValue(self);
-			else
-				return null;
-		}
-
-		public static void SetMember(this object self, string name, object value, params object[] args)
-		{
-			var m = self.GetType().GetMember(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).FirstOrDefault();
-
-			if (m is PropertyInfo)
-				((PropertyInfo)m).SetValue(self, value, args);
-			else if (m is FieldInfo)
-				((FieldInfo)m).SetValue(self, value);
-			else
-				throw new InvalidOperationException();
 		}
 	}
 }

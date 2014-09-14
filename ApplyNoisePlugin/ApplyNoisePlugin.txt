@@ -45,6 +45,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
+Version 0.3, Sun, 14 Sep 2014
+
+	MMM 本体の変更に伴いアンドゥ非対応化
+
 Version 0.2, Mon, 17 Sep 2012
 
 	新しいアンドゥスタックに対応
