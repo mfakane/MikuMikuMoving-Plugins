@@ -21,6 +21,9 @@ namespace Linearstar.MikuMikuMoving.Framework
 			var selection = textBox.SelectionStart;
 			var point = textBox.Text.IndexOf('.');
 
+			if (point == -1)
+				point = textBox.TextLength;
+
 			return textBox.SelectionLength == 0 ? this.Increment : (decimal)(selection > point
 				? Math.Pow(0.1, selection - point)
 				: Math.Pow(10, point - selection - (isNegative ? 1 : 1)));
