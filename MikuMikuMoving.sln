@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionUtil", "MotionUtil\MotionUtil.csproj", "{D7632895-7A65-4BDD-9788-AF42DB82CC07}"
 EndProject
@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		MMMInstallPlugin.bat = MMMInstallPlugin.bat
 		readme.txt = readme.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetMmdTransformationContainer", "GetMmdTransformationContainer\GetMmdTransformationContainer.csproj", "{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -253,6 +255,18 @@ Global
 		{3F81EBD7-D9B0-41D2-87EE-8E087B719258}.Release|Win32.ActiveCfg = Release|x64
 		{3F81EBD7-D9B0-41D2-87EE-8E087B719258}.Release|x64.ActiveCfg = Release|x64
 		{3F81EBD7-D9B0-41D2-87EE-8E087B719258}.Release|x64.Build.0 = Release|x64
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|Win32.ActiveCfg = Debug|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|Win32.Build.0 = Debug|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|x64.ActiveCfg = Debug|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Release|Any CPU.ActiveCfg = Release|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Release|Win32.ActiveCfg = Release|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Release|Win32.Build.0 = Release|x86
+		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Release|x64.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

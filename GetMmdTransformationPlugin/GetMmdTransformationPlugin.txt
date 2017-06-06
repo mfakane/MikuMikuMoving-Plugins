@@ -25,6 +25,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
+Version 0.6, Sun, 24 Jul 2016
+
+	x64 版 MMM に対応
+
 Version 0.5, Sat, 22 Sep 2012
 
 	x64 版 MMD に対応

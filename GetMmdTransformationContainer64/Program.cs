@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace GetMmdTransformationContainer64
+namespace GetMmdTransformationContainer
 {
 	class Program
 	{
@@ -77,7 +77,7 @@ namespace GetMmdTransformationContainer64
 					WaitForSingleObject(hThread, unchecked((uint)-1));
 					CloseHandle(hThread);
 				}
-				
+
 				// if finished, unload the library.
 				FreeLibraryRemote(hProcess, kernelModule, hModule);
 				FreeLibrary(localModule);

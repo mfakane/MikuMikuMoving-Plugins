@@ -33,3 +33,4 @@ ipch/
 *.ide
 packages/
 _*
+.localhistory/
