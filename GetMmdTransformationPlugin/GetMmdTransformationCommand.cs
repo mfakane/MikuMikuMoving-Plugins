@@ -7,7 +7,6 @@ using System.Security;
 using System.Windows.Forms;
 using DxMath;
 using Linearstar.MikuMikuMoving.Framework;
-using Linearstar.MikuMikuMoving.GetMmdTransformationPlugin.Properties;
 using MikuMikuPlugin;
 
 namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
@@ -239,22 +238,6 @@ namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
 			get
 			{
 				return new Guid("2c309851-7f3e-4b62-87f9-44e5c492a0f8");
-			}
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.GetMmdTransformation32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.GetMmdTransformation20;
 			}
 		}
 

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>BF96518A-9B96-4508-84CA-56AAA3F54083</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PluginFramework</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Bone.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\DisplayList.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\Layer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\CommandBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\Controls\IncrementSelectionNumericUpDown.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\EnableScreenObjectBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\FinallyBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\MathHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\PluginBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\ResidentBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\UndoBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DxMath">
+      <HintPath>..\MikuMikuMoving\System\DxMath.dll</HintPath>
+    </Reference>
+    <Reference Include="MikuMikuPlugin">
+      <HintPath>..\MikuMikuMoving\System\MikuMikuPlugin.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <PostBuildEvent>
+      $(SolutionDir)MMMInstallPlugin "$(OutDir)$(AssemblyName).dll"
+      $(SolutionDir)MMMInstallPlugin "$(OutDir)$(AssemblyName).pdb"
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DxMath;
-using Linearstar.MikuMikuMoving.ApplyOffsetPlugin.Properties;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
@@ -359,22 +357,6 @@ namespace Linearstar.MikuMikuMoving.ApplyOffsetPlugin
 			get
 			{
 				return new Guid("9d7c25d5-87e7-4855-9f75-6ca58c317c0f");
-			}
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.ApplyOffset32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.ApplyOffset20;
 			}
 		}
 	}

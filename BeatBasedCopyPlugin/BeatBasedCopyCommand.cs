@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Linearstar.MikuMikuMoving.BeatBasedCopyPlugin.Properties;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
@@ -241,22 +240,6 @@ namespace Linearstar.MikuMikuMoving.BeatBasedCopyPlugin
 		{
 			for (int i = 0; ; i++)
 				yield return (long)(framesPerBeat * i);
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.BeatBasedCopyPlugin32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.BeatBasedCopyPlugin20;
-			}
 		}
 
 		public override string EnglishText

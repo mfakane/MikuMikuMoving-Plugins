@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,7 +7,6 @@ using System.Windows.Forms;
 using DxMath;
 using Linearstar.Keystone.IO.MikuMikuDance;
 using Linearstar.MikuMikuMoving.Framework;
-using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Properties;
 using MikuMikuPlugin;
 
 namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin
@@ -202,22 +200,6 @@ namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin
 		static float[] ToArray(Quaternion value)
 		{
 			return new[] { value.X, value.Y, value.Z, value.W };
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.SetMmdTransformation32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.SetMmdTransformation20;
-			}
 		}
 
 		public override string EnglishText

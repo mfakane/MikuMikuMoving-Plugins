@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
-using Linearstar.MikuMikuMoving.GetMmdTransformationPlugin.Properties;
 
 namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
 {
@@ -101,9 +101,21 @@ namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
 			var remoteProxy = Path.GetTempFileName();
 			var remoteContainer = Path.GetTempFileName();
 			var isPlatform64 = !IsWow64Process(process.Handle);
+			var assembly = Assembly.GetExecutingAssembly();
+			var containerStream =
+				assembly.GetManifestResourceStream(isPlatform64
+					? "GetMmdTransformationContainer64"
+					: "GetMmdTransformationContainer")!;
+			var proxyStream =
+				assembly.GetManifestResourceStream(isPlatform64
+					? "GetMmdTransformationProxy64"
+					: "GetMmdTransformationProxy")!;
 
-			File.WriteAllBytes(remoteContainer, isPlatform64 ? Resources.GetMmdTransformationContainer64 : Resources.GetMmdTransformationContainer);
-			File.WriteAllBytes(remoteProxy, isPlatform64 ? Resources.GetMmdTransformationProxy64 : Resources.GetMmdTransformationProxy);
+			using (var fs = File.OpenWrite(remoteContainer))
+				containerStream.CopyTo(fs);
+			
+			using (var fs = File.OpenWrite(remoteProxy))
+				proxyStream.CopyTo(fs);
 
 			using (var p = Process.Start(new ProcessStartInfo
 			{

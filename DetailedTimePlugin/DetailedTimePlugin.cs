@@ -5,7 +5,6 @@ using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Linearstar.MikuMikuMoving.DetailedTimePlugin.Properties;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
@@ -151,23 +150,7 @@ namespace Linearstar.MikuMikuMoving.DetailedTimePlugin
 		{
 			return framesPerSecond / (beatsPerMinute / 60.0);
 		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.DetailedTimePlugin32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.DetailedTimePlugin20;
-			}
-		}
-
+		
 		public override string EnglishText
 		{
 			get

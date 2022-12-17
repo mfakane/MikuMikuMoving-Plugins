@@ -34,3 +34,5 @@ ipch/
 packages/
 _*
 .localhistory/
+.idea/
+MikuMikuMoving/

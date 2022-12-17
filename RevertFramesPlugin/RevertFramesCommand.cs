@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
-using RevertFramesPlugin.Properties;
 
 namespace RevertFramesPlugin
 {
@@ -220,22 +218,6 @@ namespace RevertFramesPlugin
 			}).Reverse()).ToArray();
 
 			return keyFrames.Zip(frameNumbers, setFrameNumber).Reverse().Zip(interpol, setInterpolation);
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.RevertFrames32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.RevertFrames20;
-			}
 		}
 
 		public override string EnglishText

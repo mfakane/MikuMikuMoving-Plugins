@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DxMath;
-using Linearstar.MikuMikuMoving.ApplyNoisePlugin.Properties;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
@@ -287,22 +286,6 @@ namespace Linearstar.MikuMikuMoving.ApplyNoisePlugin
 		static int GetNoise(Random r, int width)
 		{
 			return r.Next(-width / 2, (int)(width / 2.0 + 0.5));
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.ApplyNoise32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.ApplyNoise20;
-			}
 		}
 
 		public override string Description

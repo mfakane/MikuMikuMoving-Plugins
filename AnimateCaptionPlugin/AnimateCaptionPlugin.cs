@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Linearstar.MikuMikuMoving.AnimateCaptionPlugin.Properties;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
@@ -12,21 +10,21 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 {
 	public class AnimateCaptionPlugin : ResidentBase, IHaveUserControl, ICanSavePlugin
 	{
-		readonly Dictionary<object, Action<ICaption>> list = new Dictionary<object, Action<ICaption>>();
-		readonly Dictionary<object, AnimationData> datas = new Dictionary<object, AnimationData>();
+		readonly Dictionary<ICaption, Action<ICaption>> list = new Dictionary<ICaption, Action<ICaption>>();
+		readonly Dictionary<ICaption, AnimationData> datas = new Dictionary<ICaption, AnimationData>();
 		readonly AnimateCaptionControl control = new AnimateCaptionControl
 		{
 			IsPluginEnabled = false,
 			Caption = null,
 		};
-		object activeCaption;
+		ICaption activeCaption;
 
 		public override void Update(float frame, float elapsedTime)
 		{
 			if (frame == 0)
 				frame = this.Scene.MarkerPosition;
 
-			foreach (var i in datas.Keys.Except(this.Scene.Captions.Select(_ => _.GetRealCaption())).ToArray())
+			foreach (var i in datas.Keys.Except(this.Scene.Captions).ToArray())
 				datas.Remove(i);
 
 			if (datas.ContainsValue(control.AnimationData))
@@ -44,24 +42,23 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 			}
 			else
 			{
-				var newActiveRealCaption = newActiveCaption.GetRealCaption();
-				var data = GetAnimationData(newActiveCaption, newActiveRealCaption);
+				var data = GetAnimationData(newActiveCaption);
 
-				if (newActiveRealCaption == activeCaption)
+				if (newActiveCaption == activeCaption)
 				{
 					if (data == null && control.IsAnimationEnabled)
-						data = CreateAnimationData(newActiveCaption, newActiveRealCaption);
+						data = CreateAnimationData(newActiveCaption);
 					else if (data != null && !control.IsAnimationEnabled)
 					{
 						data.ApplyAnimation(newActiveCaption, (float)newActiveCaption.StartFrame);
-						datas.Remove(newActiveRealCaption);
+						datas.Remove(newActiveCaption);
 						data = null;
 					}
 				}
 
 				control.IsAnimationEnabled = data != null;
 				control.AnimationData = data;
-				activeCaption = newActiveRealCaption;
+				activeCaption = newActiveCaption;
 			}
 
 			control.Caption = newActiveCaption;
@@ -78,7 +75,7 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 				EndFrame = _.StartFrame + _.DurationFrame,
 			}).Where(_ => frame >= _.StartFrame && frame <= _.EndFrame))
 			{
-				var realCaption = i.Caption.GetRealCaption();
+				var realCaption = i.Caption;
 
 				if (datas.ContainsKey(realCaption))
 					list.Add(realCaption, datas[realCaption].ApplyAnimation(i.Caption, frame));
@@ -87,25 +84,21 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 
 		void ResetAnimation()
 		{
-			foreach (var i in this.Scene.Captions.Select(_ => new
-			{
-				Caption = _,
-				RealCaption = _.GetRealCaption(),
-			}))
-				if (list.ContainsKey(i.RealCaption) && datas.ContainsKey(i.RealCaption))
-					list[i.RealCaption](i.Caption);
+			foreach (var i in this.Scene.Captions)
+				if (list.ContainsKey(i) && datas.ContainsKey(i))
+					list[i](i);
 
 			list.Clear();
 		}
 
-		AnimationData GetAnimationData(ICaption caption, object realCaption)
+		AnimationData GetAnimationData(ICaption caption)
 		{
-			return datas.ContainsKey(realCaption) ? datas[realCaption] : null;
+			return datas.ContainsKey(caption) ? datas[caption] : null;
 		}
 
-		AnimationData CreateAnimationData(ICaption caption, object realCaption)
+		AnimationData CreateAnimationData(ICaption caption)
 		{
-			return datas[realCaption] = new AnimationData(caption);
+			return datas[caption] = new AnimationData(caption);
 		}
 
 		public void OnLoadProject(Stream stream)
@@ -118,7 +111,7 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 
 				foreach (var i in Enumerable.Range(0, br.ReadInt32())
 											.Select(_ => AnimationData.Parse(version, br)))
-					datas.Add(this.Scene.Captions[i.Id].GetRealCaption(), i);
+					datas.Add(this.Scene.Captions[i.Id], i);
 			}
 		}
 
@@ -129,13 +122,13 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 				bw.Write((byte)1);
 				bw.Write(datas.Count);
 
-				foreach (var i in this.Scene.Captions.Select((_, idx) => new
+				foreach (var i in this.Scene.Captions.Select((x, idx) => new
 				{
 					Index = idx,
-					Item = _,
+					Item = x,
 				}))
 				{
-					var real = i.Item.GetRealCaption();
+					var real = i.Item;
 
 					if (datas.ContainsKey(real))
 					{
@@ -165,22 +158,6 @@ namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
 		{
 			ResetAnimation();
 			control.IsPluginEnabled = false;
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.AnimateCaptionPlugin32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.AnimateCaptionPlugin20;
-			}
 		}
 
 		public override string EnglishText

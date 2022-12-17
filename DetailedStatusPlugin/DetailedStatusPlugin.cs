@@ -5,7 +5,6 @@ using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
 using DxMath;
-using Linearstar.MikuMikuMoving.DetailedStatusPlugin.Properties;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
@@ -160,22 +159,6 @@ namespace Linearstar.MikuMikuMoving.DetailedStatusPlugin
 				return name + "\r\n" + Util.Bilingual(this.Scene.Language, "位置 ", "Pos ") + string.Format(format, position.Value.X, position.Value.Y, position.Value.Z) + "\r\n" + Util.Bilingual(this.Scene.Language, "角度 ", "Ang ") + string.Format(format, rotation.X, rotation.Y, rotation.Z);
 			else
 				return name + "\r\n" + Util.Bilingual(this.Scene.Language, "角度 ", "Ang ") + string.Format(format, rotation.X, rotation.Y, rotation.Z);
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.DetailedStatus32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.DetailedStatus20;
-			}
 		}
 
 		public override string EnglishText

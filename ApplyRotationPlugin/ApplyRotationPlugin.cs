@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using DxMath;
-using Linearstar.MikuMikuMoving.ApplyRotationPlugin.Properties;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
@@ -37,8 +37,11 @@ namespace Linearstar.MikuMikuMoving.ApplyRotationPlugin
 				return;
 			}
 
+			var assembly = Assembly.GetExecutingAssembly();
+
+			using (var originStream = assembly.GetManifestResourceStream("Origin")!)
 			using (new EnableScreenObjectBlock(this.Scene))
-			using (var image = new ScreenImage_2D(Point.Empty, Resources.Origin))
+			using (var image = new ScreenImage_2D(Point.Empty, originStream))
 			using (var f = new ApplyRotationForm(this.Scene.Language)
 			{
 				Position = position,
@@ -247,22 +250,6 @@ namespace Linearstar.MikuMikuMoving.ApplyRotationPlugin
 				rt *= GetMotion(bones, b);
 
 			return rt;
-		}
-
-		public override Image Image
-		{
-			get
-			{
-				return Resources.ApplyRotationPlugin32;
-			}
-		}
-
-		public override Image SmallImage
-		{
-			get
-			{
-				return Resources.ApplyRotationPlugin20;
-			}
 		}
 
 		public override string EnglishText
