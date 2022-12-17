@@ -19,12 +19,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\EnableScreenObjectBlock.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Framework\FinallyBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\MathHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveScreenImage2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveTextImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\ResidentBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\SceneExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\UndoBlock.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Framework\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.resx" />
@@ -36,6 +37,7 @@
     <Reference Include="MikuMikuPlugin">
       <HintPath>..\MikuMikuMoving\System\MikuMikuPlugin.dll</HintPath>
     </Reference>
+    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
   </ItemGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>

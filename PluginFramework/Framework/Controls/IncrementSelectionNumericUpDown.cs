@@ -2,69 +2,70 @@
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Linearstar.MikuMikuMoving.Framework
+namespace Linearstar.MikuMikuMoving.Framework;
+
+class IncrementSelectionNumericUpDown : NumericUpDown
 {
-	class IncrementSelectionNumericUpDown : NumericUpDown
+	readonly TextBox textBox;
+
+	public IncrementSelectionNumericUpDown()
 	{
-		TextBox textBox;
+		textBox = (TextBox)typeof(NumericUpDown).GetField("upDownEdit", BindingFlags.NonPublic | BindingFlags.Instance)!
+			.GetValue(this);
+		textBox.HideSelection = false;
+	}
 
-		public IncrementSelectionNumericUpDown()
-			: base()
+	decimal GetUpDownValue()
+	{
+		var isNegative = Value < 0;
+		var selection = textBox.SelectionStart;
+		var point = textBox.Text.IndexOf('.');
+
+		if (point == -1)
+			point = textBox.TextLength;
+
+		return textBox.SelectionLength == 0
+			? Increment // 選択なしなら設定されているインクリメント値
+			: (decimal)(selection > point
+				? Math.Pow(0.1, selection - point) // 小数点より右側なら 0.1 ^ 小数点からの桁数
+				: Math.Pow(10, point - selection - 1)); // 小数点より左側なら 10 ^ 小数点からの桁数
+	}
+
+	public override void UpButton()
+	{
+		var oldIncrement = Increment;
+		var selection = new
 		{
-			textBox = (TextBox)typeof(NumericUpDown).GetField("upDownEdit", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this);
-			textBox.HideSelection = false;
-		}
+			textBox.SelectionStart,
+			textBox.SelectionLength,
+		};
+		var textLength = textBox.TextLength;
 
-		decimal GetUpDownValue(TextBox textBox)
+		Increment = GetUpDownValue();
+		base.UpButton();
+		Increment = oldIncrement;
+
+		var targetIndex = Math.Max(0, selection.SelectionStart - (textLength - textBox.TextLength));
+
+		Select(targetIndex, Math.Min(targetIndex + selection.SelectionLength, textBox.TextLength) - targetIndex);
+	}
+
+	public override void DownButton()
+	{
+		var oldIncrement = Increment;
+		var selection = new
 		{
-			var isNegative = this.Value < 0;
-			var selection = textBox.SelectionStart;
-			var point = textBox.Text.IndexOf('.');
+			textBox.SelectionStart,
+			textBox.SelectionLength,
+		};
+		var textLength = textBox.TextLength;
 
-			if (point == -1)
-				point = textBox.TextLength;
+		Increment = GetUpDownValue();
+		base.DownButton();
+		Increment = oldIncrement;
 
-			return textBox.SelectionLength == 0 ? this.Increment : (decimal)(selection > point
-				? Math.Pow(0.1, selection - point)
-				: Math.Pow(10, point - selection - (isNegative ? 1 : 1)));
-		}
+		var targetIndex = Math.Max(0, selection.SelectionStart - (textLength - textBox.TextLength));
 
-		public override void UpButton()
-		{
-			var oldIncrement = this.Increment;
-			var selection = new
-			{
-				textBox.SelectionStart,
-				textBox.SelectionLength,
-			};
-			var textLength = textBox.TextLength;
-
-			this.Increment = GetUpDownValue(textBox);
-			base.UpButton();
-			this.Increment = oldIncrement;
-
-			var targetIndex = Math.Max(0, selection.SelectionStart - (textLength - textBox.TextLength));
-
-			this.Select(targetIndex, Math.Min(targetIndex + selection.SelectionLength, textBox.TextLength) - targetIndex);
-		}
-
-		public override void DownButton()
-		{
-			var oldIncrement = this.Increment;
-			var selection = new
-			{
-				textBox.SelectionStart,
-				textBox.SelectionLength,
-			};
-			var textLength = textBox.TextLength;
-
-			this.Increment = GetUpDownValue(textBox);
-			base.DownButton();
-			this.Increment = oldIncrement;
-
-			var targetIndex = Math.Max(0, selection.SelectionStart - (textLength - textBox.TextLength));
-
-			this.Select(targetIndex, Math.Min(targetIndex + selection.SelectionLength, textBox.TextLength) - targetIndex);
-		}
+		Select(targetIndex, Math.Min(targetIndex + selection.SelectionLength, textBox.TextLength) - targetIndex);
 	}
 }

@@ -1,16 +1,15 @@
 ﻿using System;
 using MikuMikuPlugin;
 
-namespace Linearstar.MikuMikuMoving.Framework
-{
-	public class UndoBlock : IDisposable
-	{
-		public UndoBlock(Scene scene)
-		{
-		}
+namespace Linearstar.MikuMikuMoving.Framework;
 
-		public void Dispose()
-		{
-		}
+public class UndoBlock : IDisposable
+{
+	public UndoBlock(Scene scene)
+	{
+	}
+
+	public void Dispose()
+	{
 	}
 }
