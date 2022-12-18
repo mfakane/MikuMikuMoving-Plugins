@@ -1,4 +1,6 @@
-﻿namespace Linearstar.MikuMikuMoving.ApplyOffsetPlugin
+﻿using Linearstar.MikuMikuMoving.Framework;
+
+namespace Linearstar.MikuMikuMoving.ApplyOffsetPlugin
 {
 	partial class ApplyOffsetForm
 	{
@@ -38,11 +40,11 @@
 			this.label14 = new System.Windows.Forms.Label();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.label15 = new System.Windows.Forms.Label();
-			this.rNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.rNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.label16 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
-			this.gNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
-			this.bNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.gNumericUpDown = new IncrementSelectionNumericUpDown();
+			this.bNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.rTrackBar = new System.Windows.Forms.TrackBar();
 			this.gTrackBar = new System.Windows.Forms.TrackBar();
 			this.bTrackBar = new System.Windows.Forms.TrackBar();
@@ -51,14 +53,14 @@
 			this.label12 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.label13 = new System.Windows.Forms.Label();
-			this.distanceNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.distanceNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.distanceTrackBar = new System.Windows.Forms.TrackBar();
 			this.weightPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.label10 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label11 = new System.Windows.Forms.Label();
-			this.weightNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.weightNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.weightTrackBar = new System.Windows.Forms.TrackBar();
 			this.rotationPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.rotationLocalCheckBox = new System.Windows.Forms.CheckBox();
@@ -66,11 +68,11 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.rotationXNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.rotationXNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
-			this.rotationYNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
-			this.rotationZNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.rotationYNumericUpDown = new IncrementSelectionNumericUpDown();
+			this.rotationZNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.rotationXTrackBar = new System.Windows.Forms.TrackBar();
 			this.rotationYTrackBar = new System.Windows.Forms.TrackBar();
 			this.rotationZTrackBar = new System.Windows.Forms.TrackBar();
@@ -79,11 +81,11 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.positionXNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.positionXNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.positionYNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
-			this.positionZNumericUpDown = new Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown();
+			this.positionYNumericUpDown = new IncrementSelectionNumericUpDown();
+			this.positionZNumericUpDown = new IncrementSelectionNumericUpDown();
 			this.positionXTrackBar = new System.Windows.Forms.TrackBar();
 			this.positionYTrackBar = new System.Windows.Forms.TrackBar();
 			this.positionZTrackBar = new System.Windows.Forms.TrackBar();
@@ -307,7 +309,7 @@
 			this.rNumericUpDown.Name = "rNumericUpDown";
 			this.rNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.rNumericUpDown.TabIndex = 3;
-			this.rNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.rNumericUpDown.ValueChanged += new System.EventHandler(this.colorNumericUpDown_ValueChanged);
 			// 
 			// label16
 			// 
@@ -349,7 +351,7 @@
 			this.gNumericUpDown.Name = "gNumericUpDown";
 			this.gNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.gNumericUpDown.TabIndex = 6;
-			this.gNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.gNumericUpDown.ValueChanged += new System.EventHandler(this.colorNumericUpDown_ValueChanged);
 			// 
 			// bNumericUpDown
 			// 
@@ -369,7 +371,7 @@
 			this.bNumericUpDown.Name = "bNumericUpDown";
 			this.bNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.bNumericUpDown.TabIndex = 9;
-			this.bNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.bNumericUpDown.ValueChanged += new System.EventHandler(this.colorNumericUpDown_ValueChanged);
 			// 
 			// rTrackBar
 			// 
@@ -495,7 +497,7 @@
 			this.distanceNumericUpDown.Name = "distanceNumericUpDown";
 			this.distanceNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.distanceNumericUpDown.TabIndex = 3;
-			this.distanceNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.distanceNumericUpDown.ValueChanged += new System.EventHandler(this.distanceNumericUpDown_ValueChanged);
 			// 
 			// distanceTrackBar
 			// 
@@ -595,7 +597,7 @@
 			this.weightNumericUpDown.Name = "weightNumericUpDown";
 			this.weightNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.weightNumericUpDown.TabIndex = 3;
-			this.weightNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.weightNumericUpDown.ValueChanged += new System.EventHandler(this.weightNumericUpDown_ValueChanged);
 			// 
 			// weightTrackBar
 			// 
@@ -655,7 +657,7 @@
 			this.rotationLocalCheckBox.TabIndex = 10;
 			this.rotationLocalCheckBox.Text = "ローカル座標系で付加する";
 			this.rotationLocalCheckBox.UseVisualStyleBackColor = true;
-			this.rotationLocalCheckBox.CheckedChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.rotationLocalCheckBox.CheckedChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// panel2
 			// 
@@ -719,7 +721,7 @@
 			this.rotationXNumericUpDown.Name = "rotationXNumericUpDown";
 			this.rotationXNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.rotationXNumericUpDown.TabIndex = 3;
-			this.rotationXNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.rotationXNumericUpDown.ValueChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// label8
 			// 
@@ -761,7 +763,7 @@
 			this.rotationYNumericUpDown.Name = "rotationYNumericUpDown";
 			this.rotationYNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.rotationYNumericUpDown.TabIndex = 6;
-			this.rotationYNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.rotationYNumericUpDown.ValueChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// rotationZNumericUpDown
 			// 
@@ -781,7 +783,7 @@
 			this.rotationZNumericUpDown.Name = "rotationZNumericUpDown";
 			this.rotationZNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.rotationZNumericUpDown.TabIndex = 9;
-			this.rotationZNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.rotationZNumericUpDown.ValueChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// rotationXTrackBar
 			// 
@@ -916,7 +918,7 @@
 			this.positionXNumericUpDown.Name = "positionXNumericUpDown";
 			this.positionXNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.positionXNumericUpDown.TabIndex = 3;
-			this.positionXNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.positionXNumericUpDown.ValueChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// label3
 			// 
@@ -958,7 +960,7 @@
 			this.positionYNumericUpDown.Name = "positionYNumericUpDown";
 			this.positionYNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.positionYNumericUpDown.TabIndex = 6;
-			this.positionYNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.positionYNumericUpDown.ValueChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// positionZNumericUpDown
 			// 
@@ -978,7 +980,7 @@
 			this.positionZNumericUpDown.Name = "positionZNumericUpDown";
 			this.positionZNumericUpDown.Size = new System.Drawing.Size(80, 19);
 			this.positionZNumericUpDown.TabIndex = 9;
-			this.positionZNumericUpDown.ValueChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.positionZNumericUpDown.ValueChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// positionXTrackBar
 			// 
@@ -1031,7 +1033,7 @@
 			this.positionLocalCheckBox.TabIndex = 10;
 			this.positionLocalCheckBox.Text = "ローカル座標系で付加する";
 			this.positionLocalCheckBox.UseVisualStyleBackColor = true;
-			this.positionLocalCheckBox.CheckedChanged += new System.EventHandler(this.positionXNumericUpDown_ValueChanged);
+			this.positionLocalCheckBox.CheckedChanged += new System.EventHandler(this.positionAndRotationNumericUpDown_ValueChanged);
 			// 
 			// label5
 			// 
@@ -1125,43 +1127,43 @@
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.GroupBox groupBox5;
 		private System.Windows.Forms.Label label15;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown rNumericUpDown;
+		private IncrementSelectionNumericUpDown rNumericUpDown;
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.Label label17;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown gNumericUpDown;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown bNumericUpDown;
+		private IncrementSelectionNumericUpDown gNumericUpDown;
+		private IncrementSelectionNumericUpDown bNumericUpDown;
 		private System.Windows.Forms.TableLayoutPanel distancePanel;
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Label label13;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown distanceNumericUpDown;
+		private IncrementSelectionNumericUpDown distanceNumericUpDown;
 		private System.Windows.Forms.TableLayoutPanel weightPanel;
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.Label label11;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown weightNumericUpDown;
+		private IncrementSelectionNumericUpDown weightNumericUpDown;
 		private System.Windows.Forms.TableLayoutPanel rotationPanel;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Label label7;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown rotationXNumericUpDown;
+		private IncrementSelectionNumericUpDown rotationXNumericUpDown;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label label9;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown rotationYNumericUpDown;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown rotationZNumericUpDown;
+		private IncrementSelectionNumericUpDown rotationYNumericUpDown;
+		private IncrementSelectionNumericUpDown rotationZNumericUpDown;
 		private System.Windows.Forms.TableLayoutPanel positionPanel;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label label2;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown positionXNumericUpDown;
+		private IncrementSelectionNumericUpDown positionXNumericUpDown;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown positionYNumericUpDown;
-		private Linearstar.MikuMikuMoving.Framework.IncrementSelectionNumericUpDown positionZNumericUpDown;
+		private IncrementSelectionNumericUpDown positionYNumericUpDown;
+		private IncrementSelectionNumericUpDown positionZNumericUpDown;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TrackBar positionXTrackBar;
 		private System.Windows.Forms.TrackBar positionYTrackBar;

@@ -14,6 +14,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Resources\Layer.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CompilerServices\IsExternalInit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\CommandBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Controls\IncrementSelectionNumericUpDown.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.cs" />
