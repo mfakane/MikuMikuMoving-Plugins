@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Reflection;
 using MikuMikuPlugin;
 
@@ -13,6 +14,24 @@ public abstract class CommandBase : PluginBase, ICommandPlugin
 			SmallImage = Image.FromStream(icon20);
 		if (assembly.GetManifestResourceStream("Icon32") is { } icon32)
 			Image = Image.FromStream(icon32);
+	}
+
+	protected IDisposable EnableScreenObject()
+	{
+		const string pluginProxyFullTypeName = "MikuMikuMoving.PluginProxy";
+		const string processingProxyPropertyName = "ProcessingProxy";
+		const string enabledPropertyName = "Enable";
+
+		if (Assembly.GetEntryAssembly() is not { } mikuMikuMovingAssembly ||
+		    mikuMikuMovingAssembly.GetType(pluginProxyFullTypeName) is not { } pluginProxyType ||
+		    pluginProxyType.GetProperty(processingProxyPropertyName) is not { } processingProxyProperty ||
+		    pluginProxyType.GetProperty(enabledPropertyName) is not { } enabledProperty ||
+		    processingProxyProperty.GetValue(null) is not { } processingProxyInstance)
+			return Disposable.DoNothing;
+		
+		enabledProperty.SetValue(processingProxyInstance, true);
+
+		return Disposable.Create(() => enabledProperty.SetValue(processingProxyInstance, false));
 	}
 
 	public virtual void Run(CommandArgs e)
