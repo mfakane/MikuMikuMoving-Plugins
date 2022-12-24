@@ -2,236 +2,116 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using DxMath;
+using JetBrains.Annotations;
 using Linearstar.Keystone.IO.MikuMikuDance;
 using Linearstar.MikuMikuMoving.Framework;
+using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Transform;
 using MikuMikuPlugin;
 
-namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin
+namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin;
+
+[UsedImplicitly]
+public class SetMmdTransformationCommand : CommandBase
 {
-	public class SetMmdTransformationCommand : CommandBase
+	public override void Run(CommandArgs e)
 	{
-		public override void Run(CommandArgs e)
+		var mmdProcesses = Process.GetProcessesByName("MikuMikuDance");
+
+		e.Cancel = true;
+
+		try
 		{
-			var mmds = Process.GetProcessesByName("MikuMikuDance");
-
-			e.Cancel = true;
-
-			try
+			if (!mmdProcesses.Any())
 			{
-				if (!mmds.Any())
-				{
-					MessageBox.Show(this.ApplicationForm, Util.Bilingual
+				MessageBox.Show(
+					ApplicationForm,
+					Localize
 					(
-						this.Scene.Language,
 						"MikuMikuDance が起動されていません。\r\nMikuMikuDance が起動している状態で実行してください。",
 						"Cannot find MikuMikuDance.\r\nPlease start MikuMikuDance to proceed."
-					), Util.Bilingual(this.Scene.Language, this.Text, this.EnglishText), MessageBoxButtons.OK, MessageBoxIcon.Information);
+					),
+					Localize(Text, EnglishText),
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
 
-					return;
-				}
+				return;
+			}
 
-				switch (this.Scene.Mode)
-				{
-					case EditMode.CameraMode:
-					case EditMode.ModelMode:
-						break;
-					case EditMode.None:
-						MessageBox.Show(this.ApplicationForm, Util.Bilingual
-						(
-							this.Scene.Language,
-							"モデルの現在の変形状態およびモデル、カメラ、または照明のキーフレームのみ送信できます。\r\nモデル、カメラ、または照明を選択してください。",
-							"Only the current model transformation or model, camera, light keyframes can be sent.\r\nPlease select them first."
-						), Util.Bilingual(this.Scene.Language, this.Text, this.EnglishText), MessageBoxButtons.OK, MessageBoxIcon.Information);
+			var transformer = Transformer.Create(Scene);
+			if (transformer is null 
+			    or { HasMotion: false, HasKeyFrames: false } 
+			    or not { SelectedMinimumFrameNumber: { }, SelectedMaximumFrameNumber: { } })
+			{
+				MessageBox.Show(
+					ApplicationForm,
+					Localize
+					(
+						"モデルの現在の変形状態およびモデル、カメラ、または照明のキーフレームのみ送信できます。\r\nモデル、カメラ、または照明を選択してください。",
+						"Only the current model transformation or model, camera, light keyframes can be sent.\r\nPlease select them first."
+					),
+					Localize(Text, EnglishText),
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+				return;
+			}
 
-						return;
-				}
+			using var f = new SetMmdTransformationForm(Scene.Language, mmdProcesses);
+			
+			if (f.ShowDialog(ApplicationForm) != DialogResult.OK)
+				return;
 
-				using (var f = new SetMmdTransformationForm(this.Scene.Language, mmds))
-				{
-					if (f.ShowDialog(this.ApplicationForm) != DialogResult.OK)
-						return;
+			Stream? vpdStream = null;
+			Stream? vmdStream = null;
+			
+			if (transformer.HasMotion)
+			{
+				var vpdDocument = new VpdDocument();
+				transformer.WriteTo(vpdDocument, f.ChangedBonesOnly);
 
-					if (this.Scene.Mode == EditMode.ModelMode)
+				var vpdString = vpdDocument.GetFormattedText();
+				vpdStream = new MemoryStream(VpdDocument.Encoding.GetBytes(vpdString));
+			}
+
+			if (transformer.HasKeyFrames)
+			{
+				var vmdDocument = new VmdDocument();
+				transformer.WriteTo(
+					vmdDocument,
+					transformer.SelectedMinimumFrameNumber!.Value,
+					transformer.SelectedMaximumFrameNumber!.Value
+				);
+
+				vmdStream = new MemoryStream();
+				vmdDocument.Write(vmdStream);
+				vmdStream.Position = 0;
+			}
+			
+			if (vmdStream != null)
+				using (vmdStream)
+					MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, new("TempMotion" + f.SelectedMmd.Id + ".vmd", vmdStream));
+
+			if (vpdStream != null)
+				using (vpdStream)
+					MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, new("TempPose" + f.SelectedMmd.Id + ".vpd", vpdStream)
 					{
-						var model = this.Scene.ActiveModel;
-						var changedBonesOnly = f.ChangedBonesOnly;
-						var vpd = new VpdDocument
-						{
-							ParentFileName = "miku.osm",
-						};
-						var vmd = new VmdDocument
-						{
-							ModelName = model.Name,
-						};
-						var useVmd = false;
-						var frameNumbers = model.Bones.SelectMany(_ => _.Layers)
-													  .SelectMany(_ => _.Frames)
-													  .Where(_ => _.Selected)
-													  .Select(_ => _.FrameNumber)
-													  .Concat(model.Morphs.SelectMany(_ => _.Frames)
-																		  .Where(_ => _.Selected)
-																		  .Select(_ => _.FrameNumber))
-													  .DefaultIfEmpty(0)
-													  .ToArray();
-						var firstFrame = frameNumbers.Min();
-
-						foreach (var i in model.Bones)
-						{
-							var local = i.CurrentLocalMotion;
-
-							if (!changedBonesOnly ||
-								local.Move != Vector3.Zero ||
-								local.Rotation != Quaternion.Identity)
-								vpd.Bones.Add(new VpdBone
-								{
-									BoneName = i.Name,
-									Position = ToArray(local.Move),
-									Quaternion = ToArray(local.Rotation),
-								});
-
-							foreach (var j in i.Layers.First().SelectedFrames)
-							{
-								useVmd = true;
-
-								vmd.BoneFrames.Add(new VmdBoneFrame
-								{
-									FrameTime = (uint)(j.FrameNumber - firstFrame),
-									Name = i.Name,
-									Position = ToArray(j.Position),
-									Quaternion = ToArray(j.Quaternion),
-									RotationInterpolation = ToArray(j.InterpolRA, j.InterpolRB),
-									XInterpolation = ToArray(j.InterpolXA, j.InterpolXB),
-									YInterpolation = ToArray(j.InterpolYA, j.InterpolYB),
-									ZInterpolation = ToArray(j.InterpolZA, j.InterpolZB),
-								});
-							}
-						}
-
-						foreach (var i in model.Morphs)
-							foreach (var j in i.SelectedFrames)
-							{
-								useVmd = true;
-
-								vmd.MorphFrames.Add(new VmdMorphFrame
-								{
-									FrameTime = (uint)(j.FrameNumber - firstFrame),
-									Name = i.Name,
-									Weight = j.Weight,
-								});
-							}
-
-						if (useVmd)
-							using (var vmdStream = new MemoryStream())
-							{
-								vmd.Write(vmdStream);
-								vmdStream.Seek(0, SeekOrigin.Begin);
-
-								MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, new MmdDropFile("TempMotion" + f.SelectedMmd.Id + ".vmd", vmdStream));
-							}
-
-						using (var vpdStream = new MemoryStream(Encoding.GetEncoding(932).GetBytes(vpd.GetFormattedText())))
-							MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, new MmdDropFile("TempPose" + f.SelectedMmd.Id + ".vpd", vpdStream)
-							{
-								Timeout = 500,
-							});
-					}
-					else if (this.Scene.Mode == EditMode.CameraMode)
-					{
-						var vmd = new VmdDocument
-						{
-							ModelName = "カメラ・照明\0on Data",
-						};
-
-						foreach (var i in this.Scene.Cameras.First().Layers.First().SelectedFrames)
-							vmd.CameraFrames.Add(new VmdCameraFrame
-							{
-								FrameTime = (uint)i.FrameNumber,
-								Position = ToArray(i.Position),
-								Angle = ToArray(new Vector3(-i.Angle.X, (float)(i.Angle.Y - Math.PI), i.Angle.Z)),
-								FovInDegree = (int)MathHelper.ToDegrees(i.Fov),
-								Ortho = /* TODO: get perspective */ false,
-								Radius = -i.Radius,
-								AngleInterpolation = ToArray(i.InterpolRoteA, i.InterpolRoteB),
-								XInterpolation = ToArray(i.InterpolMoveA, i.InterpolMoveB),
-								YInterpolation = ToArray(i.InterpolMoveA, i.InterpolMoveB),
-								ZInterpolation = ToArray(i.InterpolMoveA, i.InterpolMoveB),
-								RadiusInterpolation = ToArray(i.InterpolDistA, i.InterpolDistB),
-								FovInterpolation = ToArray(i.InterpolFovA, i.InterpolFovB),
-							});
-
-						foreach (var i in this.Scene.Lights.First().SelectedFrames)
-							vmd.LightFrames.Add(new VmdLightFrame
-							{
-								FrameTime = (uint)i.FrameNumber,
-								Position = ToArray(-i.Position / 100),
-								Color = ToArray(i.Color),
-							});
-
-						using (var vmdStream = new MemoryStream())
-						{
-							vmd.Write(vmdStream);
-							vmdStream.Seek(0, SeekOrigin.Begin);
-
-							MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, new MmdDropFile("TempMotion" + f.SelectedMmd.Id + ".vmd", vmdStream));
-						}
-					}
-				}
-			}
-			finally
-			{
-				foreach (var i in mmds)
-					i.Dispose();
-			}
+						Timeout = 500,
+					});
 		}
-
-		static VmdInterpolationPoint[] ToArray(InterpolatePoint a, InterpolatePoint b)
+		finally
 		{
-			return new[] { new VmdInterpolationPoint((byte)a.X, (byte)a.Y), new VmdInterpolationPoint((byte)b.X, (byte)b.Y) };
-		}
-
-		static float[] ToArray(Vector3 value)
-		{
-			return new[] { value.X, value.Y, value.Z };
-		}
-
-		static float[] ToArray(Quaternion value)
-		{
-			return new[] { value.X, value.Y, value.Z, value.W };
-		}
-
-		public override string EnglishText
-		{
-			get
-			{
-				return Util.EnvorinmentNewLine("Set MMD\r\nTransformation");
-			}
-		}
-
-		public override string Text
-		{
-			get
-			{
-				return Util.EnvorinmentNewLine("MMD\r\nポーズ設定");
-			}
-		}
-
-		public override string Description
-		{
-			get
-			{
-				return Util.Bilingual(this.Scene.Language, "現在の変形状態を MMD で現在選択されているモデルに設定します。", " Set current transformation to the current model on MMD.");
-			}
-		}
-
-		public override Guid GUID
-		{
-			get
-			{
-				return new Guid("a3467169-214b-42a5-8249-45813043d12c");
-			}
+			foreach (var i in mmdProcesses)
+				i.Dispose();
 		}
 	}
+	
+	public override string EnglishText => "Set MMD\r\nTransformation";
+
+	public override string Text => "MMD\r\nポーズ設定";
+
+	public override string Description => Localize("現在の変形状態を MMD で現在選択されているモデルに設定します。", " Set current transformation to the current model on MMD.");
+
+	public override Guid GUID => new("a3467169-214b-42a5-8249-45813043d12c");
 }

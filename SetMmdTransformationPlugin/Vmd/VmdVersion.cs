@@ -1,8 +1,7 @@
-﻿namespace Linearstar.Keystone.IO.MikuMikuDance
+﻿namespace Linearstar.Keystone.IO.MikuMikuDance;
+
+public enum VmdVersion
 {
-	public enum VmdVersion
-	{
-		MMDVer2,
-		MMDVer3,
-	}
+	MMDVer2,
+	MMDVer3,
 }

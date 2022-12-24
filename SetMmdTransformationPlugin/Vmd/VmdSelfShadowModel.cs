@@ -1,9 +1,8 @@
-﻿namespace Linearstar.Keystone.IO.MikuMikuDance
+﻿namespace Linearstar.Keystone.IO.MikuMikuDance;
+
+public enum VmdSelfShadowModel : byte
 {
-	public enum VmdSelfShadowModel : byte
-	{
-		None,
-		Model1,
-		Model2,
-	}
+	None,
+	Model1,
+	Model2,
 }

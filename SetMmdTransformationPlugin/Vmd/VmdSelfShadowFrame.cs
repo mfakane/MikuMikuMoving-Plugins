@@ -1,48 +1,47 @@
 ﻿using System.IO;
 
-namespace Linearstar.Keystone.IO.MikuMikuDance
+namespace Linearstar.Keystone.IO.MikuMikuDance;
+
+public class VmdSelfShadowFrame
 {
-	public class VmdSelfShadowFrame
+	public uint FrameTime
 	{
-		public uint FrameTime
-		{
-			get;
-			set;
-		}
+		get;
+		set;
+	}
 
-		public VmdSelfShadowModel Model
-		{
-			get;
-			set;
-		}
+	public VmdSelfShadowModel Model
+	{
+		get;
+		set;
+	}
 
-		public float Distance
-		{
-			get;
-			set;
-		}
+	public float Distance
+	{
+		get;
+		set;
+	}
 
-		public VmdSelfShadowFrame()
-		{
-			this.Model = VmdSelfShadowModel.Model1;
-			this.Distance = (10000 - 8875) / 100000;
-		}
+	public VmdSelfShadowFrame()
+	{
+		Model = VmdSelfShadowModel.Model1;
+		Distance = (10000 - 8875) / 100000;
+	}
 
-		public static VmdSelfShadowFrame Parse(BinaryReader br)
+	public static VmdSelfShadowFrame Parse(BinaryReader br)
+	{
+		return new()
 		{
-			return new VmdSelfShadowFrame
-			{
-				FrameTime = br.ReadUInt32(),
-				Model = (VmdSelfShadowModel)br.ReadByte(),
-				Distance = br.ReadSingle(),
-			};
-		}
+			FrameTime = br.ReadUInt32(),
+			Model = (VmdSelfShadowModel)br.ReadByte(),
+			Distance = br.ReadSingle(),
+		};
+	}
 
-		public void Write(BinaryWriter bw)
-		{
-			bw.Write(this.FrameTime);
-			bw.Write((byte)this.Model);
-			bw.Write(this.Distance);
-		}
+	public void Write(BinaryWriter bw)
+	{
+		bw.Write(FrameTime);
+		bw.Write((byte)Model);
+		bw.Write(Distance);
 	}
 }
