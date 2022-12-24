@@ -40,9 +40,7 @@ public class SetMmdTransformationCommand : CommandBase
 			}
 
 			var transformer = Transformer.Create(Scene);
-			if (transformer is null 
-			    or { HasMotion: false, HasKeyFrames: false } 
-			    or not { SelectedMinimumFrameNumber: { }, SelectedMaximumFrameNumber: { } })
+			if (transformer is null or { HasMotion: false, HasKeyFrames: false })
 			{
 				MessageBox.Show(
 					ApplicationForm,
@@ -63,8 +61,8 @@ public class SetMmdTransformationCommand : CommandBase
 			if (f.ShowDialog(ApplicationForm) != DialogResult.OK)
 				return;
 
-			Stream? vpdStream = null;
-			Stream? vmdStream = null;
+			TempFile? vpdFile = null;
+			TempFile? vmdFile = null;
 			
 			if (transformer.HasMotion)
 			{
@@ -72,33 +70,33 @@ public class SetMmdTransformationCommand : CommandBase
 				transformer.WriteTo(vpdDocument, f.ChangedBonesOnly);
 
 				var vpdString = vpdDocument.GetFormattedText();
-				vpdStream = new MemoryStream(VpdDocument.Encoding.GetBytes(vpdString));
+
+				vpdFile = new TempFile($"TempPose{f.SelectedMmd.Id}_{Environment.TickCount}.vpd");
+				File.WriteAllText(vpdFile.FileName, vpdString, VpdDocument.Encoding);
 			}
 
-			if (transformer.HasKeyFrames)
+			if (transformer is
+			    {
+				    HasKeyFrames: true, 
+				    SelectedMinimumFrameNumber: { } minFrame,
+				    SelectedMaximumFrameNumber: { } maxFrame,
+			    })
 			{
 				var vmdDocument = new VmdDocument();
-				transformer.WriteTo(
-					vmdDocument,
-					transformer.SelectedMinimumFrameNumber!.Value,
-					transformer.SelectedMaximumFrameNumber!.Value
-				);
+				transformer.WriteTo(vmdDocument, minFrame, maxFrame);
 
-				vmdStream = new MemoryStream();
-				vmdDocument.Write(vmdStream);
-				vmdStream.Position = 0;
+				vmdFile = new TempFile($"TempMotion{f.SelectedMmd.Id}_{Environment.TickCount}.vmd");
+
+				using var stream = File.OpenWrite(vmdFile.FileName);
+				
+				vmdDocument.Write(stream);
 			}
-			
-			if (vmdStream != null)
-				using (vmdStream)
-					MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, new("TempMotion" + f.SelectedMmd.Id + ".vmd", vmdStream));
 
-			if (vpdStream != null)
-				using (vpdStream)
-					MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, new("TempPose" + f.SelectedMmd.Id + ".vpd", vpdStream)
-					{
-						Timeout = 500,
-					});
+			if (vmdFile != null)
+				MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, vmdFile.FileName);
+
+			if (vpdFile != null)
+				MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, vpdFile.FileName);
 		}
 		finally
 		{
