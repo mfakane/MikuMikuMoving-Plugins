@@ -16,18 +16,29 @@
     </Content>
     <EmbeddedResource Include="Resources\GetMmdTransformation20.png" LogicalName="Icon20" />
     <EmbeddedResource Include="Resources\GetMmdTransformation32.png" LogicalName="Icon32" />
-    <EmbeddedResource Include="..\GetMmdTransformationContainer\bin\x86\$(Configuration)\$(TargetFramework)\GetMmdTransformationContainer.exe" LogicalName="GetMmdTransformationContainer.exe">
+    <EmbeddedResource Include="..\GetMmdTransformationContainer\bin\x86\$(Configuration)\$(TargetFramework)\GetMmdTransformationContainer.exe" LogicalName="GetMmdTransformationContainer">
       <Link>Resources\GetMmdTransformationContainer.exe</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\GetMmdTransformationContainer\bin\x64\$(Configuration)\$(TargetFramework)\GetMmdTransformationContainer.exe" LogicalName="GetMmdTransformationContainer64.exe">
+    <EmbeddedResource Include="..\GetMmdTransformationContainer\bin\x64\$(Configuration)\$(TargetFramework)\GetMmdTransformationContainer.exe" LogicalName="GetMmdTransformationContainer64">
       <Link>Resources\GetMmdTransformationContainer64.exe</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\GetMmdTransformationProxy\bin\Win32\$(Configuration)\GetMmdTransformationProxy.dll" LogicalName="GetMmdTransformationProxy.dll">
+    <EmbeddedResource Include="..\GetMmdTransformationProxy\bin\Win32\$(Configuration)\GetMmdTransformationProxy.dll" LogicalName="GetMmdTransformationProxy">
       <Link>Resources\GetMmdTransformationProxy.dll</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\GetMmdTransformationProxy\bin\x64\$(Configuration)\GetMmdTransformationProxy.dll" LogicalName="GetMmdTransformationProxy64.dll">
+    <EmbeddedResource Include="..\GetMmdTransformationProxy\bin\x64\$(Configuration)\GetMmdTransformationProxy.dll" LogicalName="GetMmdTransformationProxy64">
       <Link>Resources\GetMmdTransformationProxy64.dll</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Mmd\MmdImport.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MmdImport.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Mmd\MmdImport.Generated.cs">
+      <DependentUpon>MmdImport.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="..\PluginFramework\PluginFramework.projitems" Label="Shared" />
 </Project>

@@ -1,44 +1,26 @@
 ﻿using DxMath;
 
-namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
+namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin.Mmd;
+
+public class MmdBone
 {
-	class MmdBone
+	readonly MmdImport import;
+
+	public MmdModel Model { get; }
+
+	public int Index { get; }
+
+	public string Name => import.ExpGetPmdBoneName(Model.Index, Index);
+
+	public Matrix Transform => import.ExpGetPmdBoneWorldMat(Model.Index, Index);
+
+	public MmdBone(MmdImport import, MmdModel model, int index)
 	{
-		readonly MmdImport import;
-
-		public MmdModel Model
-		{
-			get;
-			private set;
-		}
-
-		public int Index
-		{
-			get;
-			private set;
-		}
-
-		public string Name
-		{
-			get
-			{
-				return import.ExpGetPmdBoneName(this.Model.Index, this.Index);
-			}
-		}
-
-		public Matrix Transform
-		{
-			get
-			{
-				return import.ExpGetPmdBoneWorldMat(this.Model.Index, this.Index);
-			}
-		}
-
-		public MmdBone(MmdImport import, MmdModel model, int index)
-		{
-			this.import = import;
-			this.Model = model;
-			this.Index = index;
-		}
+		this.import = import;
+		Model = model;
+		Index = index;
 	}
+
+	public override int GetHashCode() =>
+		Model.GetHashCode() ^ typeof(MmdBone).GetHashCode() ^ Index;
 }

@@ -1,42 +1,24 @@
-﻿namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
+﻿namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin.Mmd;
+
+public class MmdMorph
 {
-	class MmdMorph
+	readonly MmdImport import;
+
+	public MmdModel Model { get; }
+
+	public int Index { get; }
+
+	public string Name => import.ExpGetPmdMorphName(Model.Index, Index);
+
+	public float Weight => import.ExpGetPmdMorphValue(Model.Index, Index);
+
+	public MmdMorph(MmdImport import, MmdModel model, int index)
 	{
-		readonly MmdImport import;
-
-		public MmdModel Model
-		{
-			get;
-			private set;
-		}
-
-		public int Index
-		{
-			get;
-			private set;
-		}
-
-		public string Name
-		{
-			get
-			{
-				return import.ExpGetPmdMorphName(this.Model.Index, this.Index);
-			}
-		}
-
-		public float Weight
-		{
-			get
-			{
-				return import.ExpGetPmdMorphValue(this.Model.Index, this.Index);
-			}
-		}
-
-		public MmdMorph(MmdImport import, MmdModel model, int index)
-		{
-			this.import = import;
-			this.Model = model;
-			this.Index = index;
-		}
+		this.import = import;
+		Model = model;
+		Index = index;
 	}
+
+	public override int GetHashCode() =>
+		Model.GetHashCode() ^ typeof(MmdMorph).GetHashCode() ^ Index;
 }

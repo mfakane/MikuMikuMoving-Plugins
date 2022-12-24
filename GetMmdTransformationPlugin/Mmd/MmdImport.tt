@@ -2,26 +2,26 @@
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="System.Text" #>
-<#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".Generated.cs" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
 <#
+    var templateDir = Path.GetDirectoryName(Host.TemplateFile);
+    if (templateDir == null) throw new InvalidOperationException();
 
-var lines = File.ReadLines(Path.Combine(Path.GetDirectoryName(this.Host.TemplateFile), @"..\..\GetMmdTransformationProxy\MMDExport.h"))
-				.Where(_ => _.TrimStart().StartsWith("_EXPORT"))
-				.Select(_ => _.Substring(9).Split(new[] { "//" }, StringSplitOptions.None).First().Trim().TrimEnd(')', ';').Split(new[] { ' ', '\t', '(', ',' }, StringSplitOptions.RemoveEmptyEntries))
-				.Select(_ => new
-				{
-					ReturnType = _[0],
-					Name = _[1],
-					DelegateName = _[1] + "Proc",
-					Arguments = _.Skip(2).ToArray(),
-					ArgumentDefinitions = string.Join(", ", _.Skip(2).Select((__, idx) => "int arg" + (idx + 1))),
-					ArgumentString = string.Join(", ", _.Skip(2).Select((__, idx) => "args[" + idx + "]")),
-				})
-				.Where(_ => new[] { "char*", "int", "float", "bool", "D3DMATRIX" }.Contains(_.ReturnType))
-				.ToArray();
-
+    var exportRegex = new Regex(@"^\s*_EXPORT\s+(?<type>\w+\*?)\s+(?<name>\w+)\((?:(?<args>\w+)(?:,\s*)?)*\);",
+        RegexOptions.Compiled | RegexOptions.Multiline);
+    var exportedFunctions = File.ReadLines(Path.Combine(templateDir, @"..\..\GetMmdTransformationProxy\MMDExport.h"))
+        .Select(x => exportRegex.Match(x))
+        .Where(x => x.Success)
+        .Select(x => new
+        {
+            ReturnType = x.Groups["type"].Value,
+            Name = x.Groups["name"].Value,
+            DelegateName = x.Groups["name"].Value + "Proc",
+            Arguments = x.Groups["args"].Captures.Cast<Capture>().Select(c => c.Value).ToArray(),
+        })
+        .Where(x => x.ReturnType is "char*" or "int" or "float" or "bool" or "D3DMATRIX")
+        .ToArray();
 #>
 using System;
 using System.Collections.Generic;
@@ -35,31 +35,27 @@ using System.Security;
 using System.Text;
 using DxMath;
 
-namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
-{
-	partial class MmdImport
-	{
-<# foreach (var i in lines)
-{
-	var returnType = i.ReturnType;
+namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin.Mmd;
 
-	switch (returnType)
-	{
-		case "char*":
-			returnType = "string";
-			
-			break;
-		case "D3DMATRIX":
-			returnType = "Matrix";
-
-			break;
-	}
+partial class MmdImport
+{
+<#
+    foreach (var def in exportedFunctions)
+    {
+        var returnType = def.ReturnType switch
+        {
+            "char*" => "string",
+            "D3DMATRIX" => "Matrix",
+            { } x => x,
+        };
 #>
-		public <#=returnType #> <#=i.Name #>(<#=i.ArgumentDefinitions #>)
-		{
-			return InvokeRemote<<#=returnType #>>("<#=i.Name #>", new int[] { <#=string.Join(", ", i.Arguments.Select((_, idx) => "arg" + (idx + 1))) #> });
-		}
-
-<# } #>
+	public <#= returnType #> <#= def.Name #>(<#= string.Join(", ", def.Arguments.Select((x, i) => $"{x} arg{i}")) #>)
+	{
+		return InvokeRemote<<#= returnType #>>("<#= def.Name #>", new int[] { <#=
+        string.Join(", ", def.Arguments.Select((_, i) => $"arg{i}")) #> });
 	}
+
+<#
+    }
+#>
 }

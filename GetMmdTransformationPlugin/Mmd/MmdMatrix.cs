@@ -1,22 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin
-{
-	struct MmdMatrix
-	{
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-		float[] value;
+namespace Linearstar.MikuMikuMoving.GetMmdTransformationPlugin.Mmd;
 
-		public float[] Value
-		{
-			get
-			{
-				return value;
-			}
-			set
-			{
-				this.value = value;
-			}
-		}
-	}
+[StructLayout(LayoutKind.Sequential)]
+struct MmdMatrix
+{
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+	public readonly float[] Value;
 }

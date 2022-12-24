@@ -254,7 +254,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "MMD からポーズを取得";
-			this.Load += new System.EventHandler(this.MmdPoseRecieveForm_Load);
+			this.Load += new System.EventHandler(this.GetMmdTransformationForm_Load);
 			this.outerContainerPanel.ResumeLayout(false);
 			this.outerContainerPanel.PerformLayout();
 			this.flowLayoutPanel1.ResumeLayout(false);
