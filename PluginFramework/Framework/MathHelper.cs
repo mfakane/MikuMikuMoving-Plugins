@@ -5,6 +5,12 @@ namespace Linearstar.MikuMikuMoving.Framework;
 
 static class MathHelper
 {
+	public static int Clamp(int value, int minimum, int maximum) =>
+		Math.Max(minimum, Math.Min(value, maximum));
+	
+	public static float Clamp(float value, float minimum, float maximum) =>
+		Math.Max(minimum, Math.Min(value, maximum));
+	
 	public static int Lerp(int value1, int value2, float amount) => 
 		(int)(value1 + (value2 - value1) * amount);
 

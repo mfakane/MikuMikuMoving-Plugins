@@ -1,200 +1,229 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using JetBrains.Annotations;
+using Linearstar.MikuMikuMoving.AnimateCaptionPlugin.Animation;
+using Linearstar.MikuMikuMoving.AnimateCaptionPlugin.Controls;
 using Linearstar.MikuMikuMoving.Framework;
 using MikuMikuPlugin;
 
-namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
+namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin;
+
+[UsedImplicitly]
+public class AnimateCaptionPlugin : ResidentBase, IHaveUserControl, ICanSavePlugin
 {
-	public class AnimateCaptionPlugin : ResidentBase, IHaveUserControl, ICanSavePlugin
+	readonly AnimateCaptionControl control = new();
+	Animator? animator;
+	SceneState? state;
+
+	Animator Animator => animator ??= new Animator(Scene);
+	
+	AnimateCaptionControl? Control => Scene.State == MikuMikuPlugin.SceneState.Editing ? control : null;
+	
+	public override void Update(float currentFrame, float elapsedTime)
 	{
-		readonly Dictionary<ICaption, Action<ICaption>> list = new Dictionary<ICaption, Action<ICaption>>();
-		readonly Dictionary<ICaption, AnimationData> datas = new Dictionary<ICaption, AnimationData>();
-		readonly AnimateCaptionControl control = new AnimateCaptionControl
+		if (currentFrame == 0)
+			currentFrame = Scene.MarkerPosition;
+
+		var newState = SceneState.FromScene(Scene, currentFrame);
+
+		if (state is { SelectedCaption: { } selectedCaption })
 		{
-			IsPluginEnabled = false,
-			Caption = null,
-		};
-		ICaption activeCaption;
-
-		public override void Update(float frame, float elapsedTime)
-		{
-			if (frame == 0)
-				frame = this.Scene.MarkerPosition;
-
-			foreach (var i in datas.Keys.Except(this.Scene.Captions).ToArray())
-				datas.Remove(i);
-
-			if (datas.ContainsValue(control.AnimationData))
-				control.SetNewValues();
-
-			ResetAnimation();
-
-			var newActiveCaption = this.Scene.SelectedCaptions.FirstOrDefault();
-
-			if (newActiveCaption == null)
+			// 前回は何かを選択していた
+			
+			if (newState.SelectedICaption is { } newSelectedCaption)
 			{
-				activeCaption = null;
-				control.IsAnimationEnabled = false;
-				control.AnimationData = null;
+				// 今回も何かを選択している
+
+				if (selectedCaption.Index == newSelectedCaption.GetIndex())
+				{
+					// 前回と同じものを選択し続けてる
+				
+					var selectedCaptionProperties = CaptionProperties.FromCaption(selectedCaption);
+					var newSelectedCaptionProperties = CaptionProperties.FromCaption(newSelectedCaption);
+					var difference = selectedCaptionProperties.GetDifference(newSelectedCaptionProperties);
+				
+					if (difference >= 1)
+					{
+						var animation = Animator.OnCaptionChanged(newSelectedCaption, selectedCaptionProperties, newSelectedCaptionProperties);
+						
+						Control?.SetAnimationToView(animation);
+					}
+				}
+				else
+				{
+					// 前回と違うものを選択した
+					
+					Animator.OnCaptionDeselected(selectedCaption);
+					Control?.OnCaptionDeselected();
+					Animator.OnCaptionSelected(newSelectedCaption);
+					Control?.OnCaptionSelected(newSelectedCaption.GetTimeFromFrame(currentFrame), Animator[newSelectedCaption]);
+				}
 			}
 			else
 			{
-				var data = GetAnimationData(newActiveCaption);
-
-				if (newActiveCaption == activeCaption)
+				// 選択を解除した
+				
+				var selectedCaptionProperties = CaptionProperties.FromCaption(selectedCaption);
+				
+				if (!newState.Captions.Any(x => x.GetDifference(selectedCaptionProperties) <= 1))
 				{
-					if (data == null && control.IsAnimationEnabled)
-						data = CreateAnimationData(newActiveCaption);
-					else if (data != null && !control.IsAnimationEnabled)
-					{
-						data.ApplyAnimation(newActiveCaption, (float)newActiveCaption.StartFrame);
-						datas.Remove(newActiveCaption);
-						data = null;
-					}
+					// 選択していたものが削除された
+					
+					Animator.OnCaptionDeselected(selectedCaption);
+					Control?.OnCaptionDeselected();
+					Animator.OnCaptionDeleted(selectedCaption.Index);
 				}
-
-				control.IsAnimationEnabled = data != null;
-				control.AnimationData = data;
-				activeCaption = newActiveCaption;
-			}
-
-			control.Caption = newActiveCaption;
-			control.CurrentFrame = frame;
-			ApplyAnimation(frame);
-		}
-
-		void ApplyAnimation(float frame)
-		{
-			foreach (var i in this.Scene.Captions.Select((_, idx) => new
-			{
-				Caption = _,
-				_.StartFrame,
-				EndFrame = _.StartFrame + _.DurationFrame,
-			}).Where(_ => frame >= _.StartFrame && frame <= _.EndFrame))
-			{
-				var realCaption = i.Caption;
-
-				if (datas.ContainsKey(realCaption))
-					list.Add(realCaption, datas[realCaption].ApplyAnimation(i.Caption, frame));
-			}
-		}
-
-		void ResetAnimation()
-		{
-			foreach (var i in this.Scene.Captions)
-				if (list.ContainsKey(i) && datas.ContainsKey(i))
-					list[i](i);
-
-			list.Clear();
-		}
-
-		AnimationData GetAnimationData(ICaption caption)
-		{
-			return datas.ContainsKey(caption) ? datas[caption] : null;
-		}
-
-		AnimationData CreateAnimationData(ICaption caption)
-		{
-			return datas[caption] = new AnimationData(caption);
-		}
-
-		public void OnLoadProject(Stream stream)
-		{
-			using (var br = new BinaryReader(stream))
-			{
-				var version = br.ReadByte();
-
-				datas.Clear();
-
-				foreach (var i in Enumerable.Range(0, br.ReadInt32())
-											.Select(_ => AnimationData.Parse(version, br)))
-					datas.Add(this.Scene.Captions[i.Id], i);
-			}
-		}
-
-		public Stream OnSaveProject()
-		{
-			using (var bw = new BinaryWriter(new MemoryStream()))
-			{
-				bw.Write((byte)1);
-				bw.Write(datas.Count);
-
-				foreach (var i in this.Scene.Captions.Select((x, idx) => new
+				else
 				{
-					Index = idx,
-					Item = x,
-				}))
-				{
-					var real = i.Item;
-
-					if (datas.ContainsKey(real))
-					{
-						var data = datas[real];
-
-						data.Id = i.Index;
-						data.Write(bw);
-					}
+					// 選択していたものが存在する
+					
+					Control?.OnCaptionDeselected();
+					Animator.OnCaptionDeselected(selectedCaption);
 				}
-
-				return new MemoryStream(((MemoryStream)bw.BaseStream).ToArray());
 			}
 		}
-
-		public override void Initialize()
+		else
 		{
-			control.Scene = this.Scene;
-		}
+			// 前回は何も選択していない
 
-		public override void Enabled()
-		{
-			control.IsPluginEnabled = true;
-			control.Caption = null;
-		}
-
-		public override void Disabled()
-		{
-			ResetAnimation();
-			control.IsPluginEnabled = false;
-		}
-
-		public override string EnglishText
-		{
-			get
+			if (newState.SelectedICaption is { } newSelectedCaption)
 			{
-				return Util.EnvorinmentNewLine("Animate\r\nCaptions");
+				// 新しく何かを選択した
+				
+				Animator.OnCaptionSelected(newSelectedCaption);
+				Control?.OnCaptionSelected(newSelectedCaption.GetTimeFromFrame(currentFrame), Animator[newSelectedCaption]);
 			}
-		}
-
-		public override string Text
-		{
-			get
+			else
 			{
-				return Util.EnvorinmentNewLine("字幕\r\nアニメーション");
+				// 今回も何も選択していない
 			}
 		}
 
-		public override string Description
+		if (state == null ||
+		    Math.Abs(state.Frame - newState.Frame) > float.Epsilon)
 		{
-			get
+			Animator.OnFrameUpdated(newState.Frame, newState.SelectedICaption);
+			Control?.OnFrameUpdated(newState.Frame, newState.SelectedICaption, Animator[newState.SelectedCaption]);
+		}
+
+		state = SceneState.FromScene(Scene, currentFrame);
+	}
+
+	public void OnLoadProject(Stream stream)
+	{
+		using var br = new BinaryReader(stream);
+
+		animator = Animator.Parse(Scene, br);
+	}
+
+	public Stream OnSaveProject()
+	{
+		using var bw = new BinaryWriter(new MemoryStream());
+		
+		Animator.Write(bw);
+		bw.Flush();
+
+		return new MemoryStream(((MemoryStream)bw.BaseStream).ToArray());
+	}
+
+	public override void Initialize()
+	{
+		control.CurrentTimeChanged += (_, e) => Scene.MarkerPosition = (long)e.Value.CurrentFrame;
+		control.IsAnimationEnabledChanged += (_, e) =>
+		{
+			if (state?.SelectedICaption is not { } selectedCaption) return;
+			
+			if (e.Value)
 			{
-				return "字幕の座標や角度などをアニメーションできます。";
+				var animation = Animator.EnableCaptionAnimation(selectedCaption);
+				Control?.OnEnableCaptionAnimation(animation);
 			}
-		}
-
-		public override Guid GUID
-		{
-			get
+			else
 			{
-				return new Guid("03f63956-256a-434f-8d45-3f9745faf6fa");
+				Animator.DisableCaptionAnimation(selectedCaption);
+				Control?.OnDisableCaptionAnimation();
 			}
-		}
-
-		public UserControl CreateControl()
+		};
+		control.AddKeyFrame += (_, e) =>
 		{
-			return control;
+			if (state?.SelectedICaption is not { } selectedCaption) return;
+			if (Animator[selectedCaption] is not { } animation) return;
+
+			animation.AddKeyFrame(selectedCaption.GetTimeFromProgress(e.Progress));
+			Control?.KeyFramesChanged(animation);
+		};
+		control.RemoveKeyFrame += (_, e) =>
+		{
+			if (state?.SelectedICaption is not { } selectedCaption) return;
+			if (Animator[selectedCaption] is not { } animation) return;
+			
+			animation.RemoveKeyFrame(e.Index);
+			Control?.KeyFramesChanged(animation);
+		};
+		control.MoveKeyFrame += (_, e) =>
+		{
+			if (state?.SelectedICaption is not { } selectedCaption) return;
+			if (Animator[selectedCaption] is not { } animation) return;
+
+			animation.MoveKeyFrame(e.Index, e.Progress);
+			Control?.KeyFramesChanged(animation);
+		};
+		control.PropertyChanged += ValueChanged;
+
+		void ValueChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (state?.SelectedICaption is not { } selectedCaption) return; 
+			if (Animator[selectedCaption] is not { } animation) return;
+
+			var property = e.Kind switch
+			{
+				CaptionPropertyKind.X => animation.X,
+				CaptionPropertyKind.Y => animation.Y,
+				CaptionPropertyKind.Alpha => animation.Alpha,
+				CaptionPropertyKind.Rotation => animation.Rotation,
+				CaptionPropertyKind.FontSize => animation.FontSize,
+				CaptionPropertyKind.LineSpacing => animation.LineSpacing,
+				CaptionPropertyKind.LetterSpacing => animation.LetterSpacing,
+				CaptionPropertyKind.ShadowDistance => animation.ShadowDistance,
+				_ => null,
+			};
+			if (property == null) return;
+			
+			property.Mode = e.Mode;
+			property.EaseIn = e.EaseIn;
+			property.EaseOut = e.EaseOut;
+			property.IterationDurationFrames = e.IterationDurationFrames;
+			property.SetPairValue(control.CurrentTime, e.FromValue, e.ToValue);
+
+			var currentFrame = Scene.MarkerPosition;
+			animation.Apply(selectedCaption, currentFrame);
+			state = SceneState.FromScene(Scene, currentFrame);
 		}
 	}
+
+	public override void Enabled()
+	{
+		state = null;
+		Animator.OnEnabled();
+		Control?.OnEnabled();
+	}
+
+	public override void Disabled()
+	{
+		Animator.OnDisabled();
+		Control?.OnDisabled();
+		state = null;
+	}
+
+	public override string EnglishText => "Animate\r\nCaptions";
+
+	public override string Text => "字幕\r\nアニメーション";
+
+	public override string Description => "字幕の座標や角度などをアニメーションできます。";
+
+	public override Guid GUID => new("03f63956-256a-434f-8d45-3f9745faf6fa");
+
+	public UserControl CreateControl() => control;
 }

@@ -2,205 +2,235 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Linearstar.MikuMikuMoving.Framework;
+using Linearstar.MikuMikuMoving.AnimateCaptionPlugin.Animation;
+using Linearstar.MikuMikuMoving.AnimateCaptionPlugin.Controls;
 using MikuMikuPlugin;
 
-namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin
+namespace Linearstar.MikuMikuMoving.AnimateCaptionPlugin;
+
+public partial class AnimateCaptionControl : UserControl
 {
-	public partial class AnimateCaptionControl : UserControl
+	bool suppressValueChanged;
+	
+	public event EventHandler<ValueChangedEventArgs<FrameTime>>? CurrentTimeChanged;
+	public event EventHandler<ValueChangedEventArgs<bool>>? IsAnimationEnabledChanged; 
+	public event EventHandler<KeyFrameChangedEventArgs>? AddKeyFrame; 
+	public event EventHandler<KeyFrameChangedEventArgs>? RemoveKeyFrame; 
+	public event EventHandler<KeyFrameChangedEventArgs>? MoveKeyFrame;
+	public event EventHandler<PropertyChangedEventArgs>? PropertyChanged;
+
+	public FrameTime CurrentTime
 	{
-		ICaption caption;
-		AnimationData animationData;
-		double currentFrame;
-		bool changing = false;
-		Action updates = null;
+		get => timelineControl.CurrentTime;
+		set => timelineControl.CurrentTime = value;
+	}
 
-		public Scene Scene
-		{
-			get;
-			set;
-		}
+	public AnimateCaptionControl()
+	{
+		InitializeComponent();
+		Font = SystemFonts.MessageBoxFont;
+		Dock = DockStyle.Top;
+		SetViewEvent();
+	}
 
-		public double CurrentFrame
-		{
-			get
+	void SetViewEvent()
+	{
+		xEntry.ValueChanged += ValueChangedHandler(xEntry, CaptionPropertyKind.X);
+		yEntry.ValueChanged += ValueChangedHandler(yEntry, CaptionPropertyKind.Y);
+		alphaEntry.ValueChanged += ValueChangedHandler(alphaEntry, CaptionPropertyKind.Alpha);
+		rotationEntry.ValueChanged += ValueChangedHandler(rotationEntry, CaptionPropertyKind.Rotation);
+		fontSizeEntry.ValueChanged += ValueChangedHandler(fontSizeEntry, CaptionPropertyKind.FontSize);
+		lineSpacingEntry.ValueChanged += ValueChangedHandler(lineSpacingEntry, CaptionPropertyKind.LineSpacing);
+		letterSpacingEntry.ValueChanged += ValueChangedHandler(letterSpacingEntry, CaptionPropertyKind.LetterSpacing);
+		shadowDistanceEntry.ValueChanged += ValueChangedHandler(shadowDistanceEntry, CaptionPropertyKind.ShadowDistance);
+
+		EventHandler<EntryChangedEventArgs> ValueChangedHandler(
+			AnimationEntryControl control,
+			CaptionPropertyKind kind
+		) =>
+			(sender, e) =>
 			{
-				return currentFrame;
-			}
-			set
-			{
-				currentFrame = value;
-				UpdateUIValues();
-			}
-		}
+				if (suppressValueChanged) return;
+				suppressValueChanged = true;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(
+					kind,
+					e.Mode,
+					e.EaseIn,
+					e.EaseOut,
+					e.IterationDuration,
+					e.BeginValue,
+					e.EndValue
+				));
+				suppressValueChanged = false;
+			};
+	}
 
-		public AnimationData AnimationData
+	void SetPropertyToView(AnimationEntryControl control, AnimatedProperty property)
+	{
+		var pair = property.GetPairFromTime(CurrentTime);
+
+		if (Math.Abs(control.BeginValue - pair.FromFrame.Value) > float.Epsilon)
+			control.BeginValue = pair.FromFrame.Value;
+
+		if (Math.Abs(control.EndValue - pair.ToFrame.Value) > float.Epsilon)
+			control.EndValue = pair.ToFrame.Value;
+
+		if (property.Mode != control.Mode)
+			control.Mode = property.Mode;
+
+		if (property.EaseIn != control.EaseIn)
+			control.EaseIn = property.EaseIn;
+
+		if (property.EaseOut != control.EaseOut)
+			control.EaseOut = property.EaseOut;
+
+		if (property.IterationDurationFrames != control.IterationDuration)
+			control.IterationDuration = property.IterationDurationFrames;
+	}
+
+	void SetViewToProperty(AnimationEntryControl control, AnimatedProperty property)
+	{
+		if (property.Mode != control.Mode)
+			property.Mode = control.Mode;
+
+		if (property.EaseIn != control.EaseIn)
+			property.EaseIn = control.EaseIn;
+
+		if (property.EaseOut != control.EaseOut)
+			property.EaseOut = control.EaseOut;
+
+		if (property.IterationDurationFrames != control.IterationDuration)
+			property.IterationDurationFrames = control.IterationDuration;
+
+		property.SetPairValue(
+			CurrentTime,
+			control.BeginValue,
+			property.Mode == AnimationMode.None ? control.BeginValue : control.EndValue
+		);
+	}
+
+	void UpdateTimelineView()
+	{
+		beginLabel.Text = CurrentTime.StartFrame.ToString("0.00");
+		endLabel.Text = (CurrentTime.StartFrame + CurrentTime.DurationFrames).ToString("0.00");
+		timelineControl.CurrentTime = CurrentTime;
+	}
+
+	void timelineControl_CurrentTimeChanged(object sender, ValueChangedEventArgs<FrameTime> e)
+	{
+		CurrentTimeChanged?.Invoke(this, e);
+		UpdateTimelineView();
+	}
+
+	void timelineControl_AddKeyFrame(object sender, KeyFrameChangedEventArgs e)
+	{
+		AddKeyFrame?.Invoke(this, e);
+		UpdateTimelineView();
+	}
+
+	void timelineControl_RemoveKeyFrame(object sender, KeyFrameChangedEventArgs e)
+	{
+		RemoveKeyFrame?.Invoke(this, e);
+		UpdateTimelineView();
+	}
+
+	void timelineControl_MoveKeyFrame(object sender, KeyFrameChangedEventArgs e)
+	{
+		MoveKeyFrame?.Invoke(this, e);
+		UpdateTimelineView();
+	}
+	
+	void enabledCheckBox_CheckedChanged(object sender, EventArgs e)
+	{
+		IsAnimationEnabledChanged?.Invoke(this, new ValueChangedEventArgs<bool>(enabledCheckBox.Checked));
+	}
+
+	public void OnFrameUpdated(float currentFrame, ICaption? selectedCaption, AnimationData? animation)
+	{
+		if (selectedCaption == null) return;
+		
+		timelineControl.CurrentTime = selectedCaption.GetTimeFromFrame(currentFrame);
+
+		if (animation != null)
 		{
-			get
-			{
-				return animationData;
-			}
-			set
-			{
-				animationData = value;
-			}
+			SetAnimationToView(animation);
 		}
+	}
 
-		public bool IsAnimationEnabled
-		{
-			get
-			{
-				return enabledCheckBox.Checked;
-			}
-			set
-			{
-				enabledCheckBox.Checked = value;
-			}
-		}
+	public void OnEnabled()
+	{
+		SuspendLayout();
+		inactiveLabel.Text = "字幕が選択されていません。";
+		ResumeLayout();
+	}
 
-		public bool IsPluginEnabled
-		{
-			get
-			{
-				return activePanel.Visible;
-			}
-			set
-			{
-				inactiveLabel.Visible = !(activePanel.Visible = value);
-			}
-		}
+	public void OnDisabled()
+	{
+		SuspendLayout();
+		activePanel.Visible = false;
+		inactiveLabel.Visible = true;
+		inactiveLabel.Text = "字幕アニメーションは現在有効ではありません。";
+		ResumeLayout();
+	}
 
-		public ICaption Caption
-		{
-			get
-			{
-				return caption;
-			}
-			set
-			{
-				caption = value;
-			}
-		}
+	public void SetAnimationToView(AnimationData? animation)
+	{
+		if (animation == null) return;
 
-		public AnimateCaptionControl()
-		{
-			InitializeComponent();
-			this.Font = SystemFonts.MessageBoxFont;
-			this.Dock = DockStyle.Top;
-		}
+		suppressValueChanged = true;
 
-		void GetValueSet(AnimationEntryControl control, AnimationEntry entry)
-		{
-			var pair = entry.GetBeginEndFramePair(this.Caption.StartFrame, this.Caption.DurationFrame, this.CurrentFrame);
-			var valueSet = new[] { pair.First().Value, pair.Last().Value };
+		timelineControl.KeyFrames = animation.X.KeyFrames.Keys.ToArray();
+		
+		SetPropertyToView(xEntry, animation.X);
+		SetPropertyToView(yEntry, animation.Y);
+		SetPropertyToView(alphaEntry, animation.Alpha);
+		SetPropertyToView(rotationEntry, animation.Rotation);
+		SetPropertyToView(fontSizeEntry, animation.FontSize);
+		SetPropertyToView(lineSpacingEntry, animation.LineSpacing);
+		SetPropertyToView(letterSpacingEntry, animation.LetterSpacing);
+		SetPropertyToView(shadowDistanceEntry, animation.ShadowDistance);
 
-			if (control.BeginValue != valueSet[0])
-				control.BeginValue = valueSet[0];
+		suppressValueChanged = false;
+	}
 
-			if (control.EndValue != valueSet[1])
-				control.EndValue = valueSet[1];
+	public void OnCaptionSelected(FrameTime currentTime, AnimationData? animation)
+	{
+		SuspendLayout();
+		inactiveLabel.Visible = false;
+		activePanel.Visible = true;
+		enabledCheckBox.Checked = animation != null;
+		parametersPanel.Visible = animation != null;
+		CurrentTime = currentTime;
+		UpdateTimelineView();
+		SetAnimationToView(animation);
+		ResumeLayout();
+	}
 
-			if (entry.Mode != control.Mode)
-				control.Mode = entry.Mode;
+	public void OnCaptionDeselected()
+	{
+		SuspendLayout();
+		activePanel.Visible = false;
+		inactiveLabel.Visible = true;
+		ResumeLayout();
+	}
 
-			if (entry.EaseIn != control.EaseIn)
-				control.EaseIn = entry.EaseIn;
+	public void OnEnableCaptionAnimation(AnimationData? animation)
+	{
+		SuspendLayout();
+		parametersPanel.Visible = true;
+		SetAnimationToView(animation);
+		ResumeLayout();
+	}
 
-			if (entry.EaseOut != control.EaseOut)
-				control.EaseOut = entry.EaseOut;
+	public void OnDisableCaptionAnimation()
+	{
+		SuspendLayout();
+		parametersPanel.Visible = false;
+		ResumeLayout();
+	}
 
-			if (entry.IterationDuration != control.IterationDuration)
-				control.IterationDuration = entry.IterationDuration;
-		}
-
-		void SetValueSet(AnimationEntryControl control, AnimationEntry entry)
-		{
-			if (entry.Mode != control.Mode)
-				entry.Mode = control.Mode;
-
-			if (entry.EaseIn != control.EaseIn)
-				entry.EaseIn = control.EaseIn;
-
-			if (entry.EaseOut != control.EaseOut)
-				entry.EaseOut = control.EaseOut;
-
-			if (entry.IterationDuration != control.IterationDuration)
-				entry.IterationDuration = control.IterationDuration;
-
-			entry.SetBeginEndFramePair(this.Caption.StartFrame, this.Caption.DurationFrame, this.CurrentFrame, new[] { control.BeginValue, entry.Mode == AnimationMode.None ? control.BeginValue : control.EndValue });
-		}
-
-		void UpdateUIValues()
-		{
-			if (activePanel.Enabled = this.Caption != null)
-			{
-				beginLabel.Text = this.Caption.StartFrame.ToString("0.00");
-				endLabel.Text = (this.Caption.StartFrame + this.Caption.DurationFrame).ToString("0.00");
-				timelineControl.CurrentAmount = (float)((this.CurrentFrame - this.Caption.StartFrame) / this.Caption.DurationFrame);
-			}
-
-			if (updates != null)
-				updates();
-
-			updates = null;
-
-			if (this.AnimationData != null)
-				timelineControl.Amounts = this.AnimationData.X.Frames.Select(_ => _.FrameAmount).ToArray();
-			else
-				timelineControl.Amounts = null;
-
-			timelineControl.TryUpdate();
-
-			if (parametersPanel.Enabled = this.Caption != null && this.AnimationData != null && this.IsAnimationEnabled)
-				if (!changing)
-					using (FinallyBlock.Create(changing = true, _ => changing = false))
-					{
-						GetValueSet(xEntry, this.AnimationData.X);
-						GetValueSet(yEntry, this.AnimationData.Y);
-						GetValueSet(alphaEntry, this.AnimationData.Alpha);
-						GetValueSet(rotationEntry, this.AnimationData.Rotation);
-						GetValueSet(fontSizeEntry, this.AnimationData.FontSize);
-						GetValueSet(lineSpacingEntry, this.AnimationData.LineSpacing);
-						GetValueSet(letterSpacingEntry, this.AnimationData.LetterSpacing);
-						GetValueSet(shadowDistanceEntry, this.AnimationData.ShadowDistance);
-					}
-		}
-
-		public void SetNewValues()
-		{
-			if (!changing)
-				using (FinallyBlock.Create(changing = true, _ => changing = false))
-					if (this.Caption != null && this.AnimationData != null)
-					{
-						SetValueSet(xEntry, this.AnimationData.X);
-						SetValueSet(yEntry, this.AnimationData.Y);
-						SetValueSet(alphaEntry, this.AnimationData.Alpha);
-						SetValueSet(rotationEntry, this.AnimationData.Rotation);
-						SetValueSet(fontSizeEntry, this.AnimationData.FontSize);
-						SetValueSet(lineSpacingEntry, this.AnimationData.LineSpacing);
-						SetValueSet(letterSpacingEntry, this.AnimationData.LetterSpacing);
-						SetValueSet(shadowDistanceEntry, this.AnimationData.ShadowDistance);
-					}
-		}
-
-		void timelineControl_CurrentAmountChanged(object sender, EventArgs e)
-		{
-			this.Scene.MarkerPosition = (int)(this.Caption.StartFrame + this.Caption.DurationFrame * timelineControl.CurrentAmount);
-		}
-
-		void timelineControl_AddAmount(object sender, AmountEventArgs e)
-		{
-			updates += () => this.AnimationData.AddFrame(this.Caption, this.Caption.StartFrame + this.Caption.DurationFrame * timelineControl.CurrentAmount);
-		}
-
-		void timelineControl_RemoveAmount(object sender, AmountEventArgs e)
-		{
-			updates += () => this.AnimationData.RemoveFrame(e.Index);
-		}
-
-		void timelineControl_ChangeAmount(object sender, AmountEventArgs e)
-		{
-			updates += () => this.AnimationData.MoveFrame(e.Index, e.Amount);
-		}
+	public void KeyFramesChanged(AnimationData animation)
+	{
+		timelineControl.KeyFrames = animation.X.KeyFrames.Keys.ToArray();
 	}
 }
