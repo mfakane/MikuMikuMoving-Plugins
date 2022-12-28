@@ -62,7 +62,9 @@ public class ApplyNoiseCommand : CommandBase
 			f.NoiseValueInterval,
 			f.NoiseValue
 		);
-		transformer.ApplyNoise(context, f.IsPositionLocal, f.IsRotationLocal);
+
+		using (Scene.BeginUndoBlock())
+			transformer.ApplyNoise(context, f.IsPositionLocal, f.IsRotationLocal);
 	}
 
 	public override string Description => "選択したキーフレームの移動および回転値に指定したオフセットを与えます。";

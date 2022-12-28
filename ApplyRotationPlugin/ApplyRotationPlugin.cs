@@ -84,7 +84,7 @@ public class ApplyRotationPlugin : CommandBase
 					return;
 				}
 
-				using (new UndoBlock(Scene))
+				using (Scene.BeginUndoBlock())
 					transformer.SaveTransform(f.Position, f.Rotation, f.IsMoveOnly);
 			}
 			finally

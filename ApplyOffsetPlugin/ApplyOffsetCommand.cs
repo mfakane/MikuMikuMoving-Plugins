@@ -85,7 +85,7 @@ public class ApplyOffsetCommand : CommandBase
 			return;
 		}
 
-		using (new UndoBlock(Scene))
+		using (Scene.BeginUndoBlock())
 		{
 			positionRotationTransformer?.SaveTransform(f.Position, f.Rotation, f.IsPositionLocal, f.IsRotationLocal);
 			positionTransformer?.SaveTransform(f.Position, f.IsPositionLocal);

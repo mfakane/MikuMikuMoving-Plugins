@@ -22,7 +22,8 @@ public class RevertFramesCommand : CommandBase
 			return;
 		}
 
-		transformer.RevertFrames(selectedMinimumFrameNumber, selectedMaximumFrameNumber);
+		using (Scene.BeginUndoBlock())
+			transformer.RevertFrames(selectedMinimumFrameNumber, selectedMaximumFrameNumber);
 	}
 
 	public override string EnglishText => "Revert\r\nFrames";

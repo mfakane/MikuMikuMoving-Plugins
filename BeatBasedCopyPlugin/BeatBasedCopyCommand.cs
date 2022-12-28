@@ -48,7 +48,8 @@ public class BeatBasedCopyCommand : CommandBase
 
 		var context = new BeatContext(f.StartupBeats, f.BeatsPerMinute, f.IntervalBeats, f.Times, Scene.KeyFramePerSec);
 
-		transformer.Copy(context, Scene.MarkerPosition);
+		using (Scene.BeginUndoBlock(true))
+			transformer.Copy(context, Scene.MarkerPosition);
 	}
 
 	public override string EnglishText => "Beat based\r\nCopy";

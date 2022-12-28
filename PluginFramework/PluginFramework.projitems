@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\ExposedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\MathHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveScreenImage2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveTextImage.cs" />
@@ -27,13 +28,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Framework\QuaternionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\ResidentBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\SceneExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Framework\UndoBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\VectorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.resx" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="DxMath">
       <HintPath>..\MikuMikuMoving\System\DxMath.dll</HintPath>
     </Reference>
