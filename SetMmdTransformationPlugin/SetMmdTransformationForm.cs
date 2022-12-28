@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -9,19 +10,19 @@ namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin;
 
 public partial class SetMmdTransformationForm : Form
 {
-	readonly IList<Process> mmds;
+	readonly IList<Process> mmdInstances;
 
-	public Process SelectedMmd => mmds[mmdComboBox.SelectedIndex];
+	public Process SelectedMmdInstance => mmdInstances[mmdComboBox.SelectedIndex];
 
 	public bool ChangedBonesOnly => changedBonesOnlyCheckBox.Checked;
 
-	public SetMmdTransformationForm(string language, IList<Process> mmds)
+	public SetMmdTransformationForm(string language, IList<Process> mmdInstances)
 	{
 		InitializeComponent();
 		Font = SystemFonts.MessageBoxFont;
-		this.mmds = mmds;
+		this.mmdInstances = mmdInstances;
 
-		mmdComboBox.Items.AddRange(mmds.Select(_ => "[PID: " + _.Id + "] " + GetProjectName(_)).Cast<object>().ToArray());
+		mmdComboBox.Items.AddRange(mmdInstances.Select(x => "[PID: " + x.Id + "] " + GetProjectName(x)).Cast<object>().ToArray());
 		mmdComboBox.SelectedIndex = 0;
 
 		if (language != "ja")
@@ -34,13 +35,26 @@ public partial class SetMmdTransformationForm : Form
 		}
 	}
 
-	string GetProjectName(Process process)
+	static string GetProjectName(Process process)
 	{
-		var rt = process.MainWindowTitle;
+		var title = process.MainWindowTitle;
+		var beginIndex = title.IndexOf(" [", StringComparison.Ordinal);
+		var endIndex = title.LastIndexOf("]", StringComparison.Ordinal);
 
-		if (rt.Contains(" ["))
-			return rt.Split(new[] { " [" }, 2, StringSplitOptions.None).Last().TrimEnd(']');
-		else
-			return "(無題のプロジェクト)";
+		if (beginIndex == -1 || endIndex == -1) return "(無題のプロジェクト)";
+		
+		beginIndex += 2;
+		
+		var fileName = title.Substring(beginIndex, endIndex - beginIndex);
+
+		if (fileName.Contains(Path.DirectorySeparatorChar))
+			fileName = Path.GetFileName(fileName);
+			
+		return fileName;
+	}
+
+	void mmdComboBox_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		instanceLabel.Text = SelectedMmdInstance.ProcessName;
 	}
 }

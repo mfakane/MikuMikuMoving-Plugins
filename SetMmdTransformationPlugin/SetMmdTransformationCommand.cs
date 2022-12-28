@@ -71,7 +71,7 @@ public class SetMmdTransformationCommand : CommandBase
 
 				var vpdString = vpdDocument.GetFormattedText();
 
-				vpdFile = new TempFile($"TempPose{f.SelectedMmd.Id}_{Environment.TickCount}.vpd");
+				vpdFile = new TempFile($"TempPose{f.SelectedMmdInstance.Id}_{Environment.TickCount}.vpd");
 				File.WriteAllText(vpdFile.FileName, vpdString, VpdDocument.Encoding);
 			}
 
@@ -85,7 +85,7 @@ public class SetMmdTransformationCommand : CommandBase
 				var vmdDocument = new VmdDocument();
 				transformer.WriteTo(vmdDocument, minFrame, maxFrame);
 
-				vmdFile = new TempFile($"TempMotion{f.SelectedMmd.Id}_{Environment.TickCount}.vmd");
+				vmdFile = new TempFile($"TempMotion{f.SelectedMmdInstance.Id}_{Environment.TickCount}.vmd");
 
 				using var stream = File.OpenWrite(vmdFile.FileName);
 				
@@ -93,10 +93,10 @@ public class SetMmdTransformationCommand : CommandBase
 			}
 
 			if (vmdFile != null)
-				MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, vmdFile.FileName);
+				MmdDrop.DropFile(f.SelectedMmdInstance.MainWindowHandle, vmdFile.FileName);
 
 			if (vpdFile != null)
-				MmdDrop.DropFile(f.SelectedMmd.MainWindowHandle, vpdFile.FileName);
+				MmdDrop.DropFile(f.SelectedMmdInstance.MainWindowHandle, vpdFile.FileName);
 		}
 		finally
 		{

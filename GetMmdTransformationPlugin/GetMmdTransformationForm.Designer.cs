@@ -38,7 +38,7 @@
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.mmdComboBox = new System.Windows.Forms.ComboBox();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
+			this.instanceLabel = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.modelListBox = new System.Windows.Forms.ListBox();
 			this.label5 = new System.Windows.Forms.Label();
@@ -186,7 +186,7 @@
 			// 
 			this.panel1.AutoSize = true;
 			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel1.Controls.Add(this.label1);
+			this.panel1.Controls.Add(this.instanceLabel);
 			this.panel1.Controls.Add(this.groupBox1);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(8, 8);
@@ -195,15 +195,15 @@
 			this.panel1.Size = new System.Drawing.Size(288, 15);
 			this.panel1.TabIndex = 0;
 			// 
-			// label1
+			// instanceLabel
 			// 
-			this.label1.AutoSize = true;
-			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(0, 3);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(85, 12);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "MikuMikuDance";
+			this.instanceLabel.AutoSize = true;
+			this.instanceLabel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.instanceLabel.Location = new System.Drawing.Point(0, 3);
+			this.instanceLabel.Name = "instanceLabel";
+			this.instanceLabel.Size = new System.Drawing.Size(85, 12);
+			this.instanceLabel.TabIndex = 0;
+			this.instanceLabel.Text = "MikuMikuDance";
 			// 
 			// groupBox1
 			// 
@@ -282,7 +282,7 @@
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.ComboBox mmdComboBox;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label instanceLabel;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.ListBox modelListBox;
 	}

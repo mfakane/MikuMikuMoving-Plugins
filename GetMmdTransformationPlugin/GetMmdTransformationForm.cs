@@ -39,19 +39,29 @@ partial class GetMmdTransformationForm : Form
 
 	static string GetProjectName(Process process)
 	{
-		var rt = process.MainWindowTitle;
+		var title = process.MainWindowTitle;
+		var beginIndex = title.IndexOf(" [", StringComparison.Ordinal);
+		var endIndex = title.LastIndexOf("]", StringComparison.Ordinal);
 
-		if (rt.Contains(" ["))
-			return rt.Split(new[] { " [" }, 2, StringSplitOptions.None).Last().TrimEnd(']');
-		else
-			return "(無題のプロジェクト)";
+		if (beginIndex == -1 || endIndex == -1) return "(無題のプロジェクト)";
+		
+		beginIndex += 2;
+		
+		var fileName = title.Substring(beginIndex, endIndex - beginIndex);
+
+		if (fileName.Contains(Path.DirectorySeparatorChar))
+			fileName = Path.GetFileName(fileName);
+			
+		return fileName;
+
 	}
 
 	void mmdComboBox_SelectedIndexChanged(object sender, EventArgs e)
 	{
 		modelListBox.Items.Clear();
-		modelListBox.Items.AddRange(SelectedMmdInstance.Models.Select(_ => Path.GetFileNameWithoutExtension(_.FileName)).Cast<object>().ToArray());
+		modelListBox.Items.AddRange(SelectedMmdInstance.Models.Select(x => Path.GetFileNameWithoutExtension(x.FileName)).Cast<object>().ToArray());
 		modelListBox.SelectedIndex = 0;
+		instanceLabel.Text = SelectedMmdInstance.Process.ProcessName;
 		OnSelectedModelChanged(e);
 	}
 
