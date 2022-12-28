@@ -26,9 +26,9 @@ public class RevertFramesCommand : CommandBase
 			transformer.RevertFrames(selectedMinimumFrameNumber, selectedMaximumFrameNumber);
 	}
 
-	public override string EnglishText => "Revert\r\nFrames";
+	public override string EnglishText => "Revert Frames";
 
-	public override string Text => "フレーム\r\n時間反転";
+	public override string Text => "フレーム時間反転";
 
 	public override string Description => "選択されたキーフレームを時間軸方向に反転します。";
 

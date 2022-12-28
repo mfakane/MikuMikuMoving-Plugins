@@ -105,9 +105,9 @@ public class SetMmdTransformationCommand : CommandBase
 		}
 	}
 	
-	public override string EnglishText => "Set MMD\r\nTransformation";
+	public override string EnglishText => "Set MMD Transformation";
 
-	public override string Text => "MMD\r\nポーズ設定";
+	public override string Text => "MMD ポーズ設定";
 
 	public override string Description => Localize("現在の変形状態を MMD で現在選択されているモデルに設定します。", " Set current transformation to the current model on MMD.");
 

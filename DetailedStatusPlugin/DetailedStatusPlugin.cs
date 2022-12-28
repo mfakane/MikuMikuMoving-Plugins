@@ -127,9 +127,9 @@ public class DetailedStatusPlugin : ResidentBase
                 """;
     }
 
-    public override string EnglishText => "Detailed\r\nStatus";
+    public override string EnglishText => "Detailed Status";
 
-    public override string Text => "詳細\r\n情報";
+    public override string Text => "詳細情報";
 
     public override string Description => Localize("選択されたボーンなどのオブジェクトの位置および回転を表示します。",
         "Shows detailed position/rotation information for selected bone or camera.");

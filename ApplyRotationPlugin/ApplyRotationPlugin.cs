@@ -94,9 +94,9 @@ public class ApplyRotationPlugin : CommandBase
 		}
 	}
 
-	public override string EnglishText => "Apply\r\nRotation";
+	public override string EnglishText => "Apply Rotation";
 
-	public override string Text => "任意中心\r\n回転付加";
+	public override string Text => "任意中心回転付加";
 
 	public override string Description => Localize("任意の点を中心に位置および角度を回転します。", "Rotates the selected motion by the specified rotation and origin.");
 

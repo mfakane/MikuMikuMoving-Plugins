@@ -117,9 +117,9 @@ public class GetMmdTransformationCommand : CommandBase
 		}
 	}
 
-	public override string EnglishText => "Get MMD\r\nTransformation";
+	public override string EnglishText => "Get MMD Transformation";
 
-	public override string Text => "MMD\r\nポーズ取得";
+	public override string Text => "MMD ポーズ取得";
 
 	public override string Description => Localize("MikuMikuDance のモデル変形状態を取得します。", "Receives model transformation status from MikuMikuDance.");
 

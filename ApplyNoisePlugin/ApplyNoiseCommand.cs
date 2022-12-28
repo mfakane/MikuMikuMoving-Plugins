@@ -69,9 +69,9 @@ public class ApplyNoiseCommand : CommandBase
 
 	public override string Description => "選択したキーフレームの移動および回転値に指定したオフセットを与えます。";
 
-	public override string EnglishText => "Apply\r\nNoise";
+	public override string EnglishText => "Apply Noise";
 
-	public override string Text => "ノイズ\r\n付加";
+	public override string Text => "ノイズ付加";
 
 	public override Guid GUID => new("3c92a157-b847-4eb6-9e2d-a1df9786dfcc");
 }

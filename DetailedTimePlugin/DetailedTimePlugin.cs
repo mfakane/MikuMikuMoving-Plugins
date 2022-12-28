@@ -96,9 +96,9 @@ public class DetailedTimePlugin : ResidentBase, ICanSavePlugin, IHaveUserControl
     static double GetFramesPerBeat(float beatsPerMinute, float framesPerSecond) =>
         framesPerSecond / (beatsPerMinute / 60.0);
 
-    public override string EnglishText => "Detailed\r\nTime";
+    public override string EnglishText => "Detailed Time";
 
-    public override string Text => "詳細\r\n時間";
+    public override string Text => "詳細時間";
 
     public override string Description => Localize("小節単位の時間を表示します。", "Shows detailed time in measures.");
 

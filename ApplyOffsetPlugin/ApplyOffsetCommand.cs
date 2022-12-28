@@ -108,9 +108,9 @@ public class ApplyOffsetCommand : CommandBase
 
 	public override string Description => "選択したキーフレームの移動および回転値に指定したオフセットを与えます。";
 
-	public override string EnglishText => "Apply\r\nOffset";
+	public override string EnglishText => "Apply Offset";
 
-	public override string Text => "オフセット\r\n付加";
+	public override string Text => "オフセット付加";
 
 	public override Guid GUID => new("9d7c25d5-87e7-4855-9f75-6ca58c317c0f");
 }

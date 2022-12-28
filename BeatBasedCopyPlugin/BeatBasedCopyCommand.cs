@@ -52,9 +52,9 @@ public class BeatBasedCopyCommand : CommandBase
 			transformer.Copy(context, Scene.MarkerPosition);
 	}
 
-	public override string EnglishText => "Beat based\r\nCopy";
+	public override string EnglishText => "Beat-based Copy";
 
-	public override string Text => "ビート\r\nコピー";
+	public override string Text => "ビートコピー";
 
 	public override string Description => "選択されたキーフレームを拍単位で位置を指定してコピーします。";
 

@@ -217,9 +217,9 @@ public class AnimateCaptionPlugin : ResidentBase, IHaveUserControl, ICanSavePlug
 		state = null;
 	}
 
-	public override string EnglishText => "Animate\r\nCaptions";
+	public override string EnglishText => "Animate Captions";
 
-	public override string Text => "字幕\r\nアニメーション";
+	public override string Text => "字幕アニメーション";
 
 	public override string Description => "字幕の座標や角度などをアニメーションできます。";
 
