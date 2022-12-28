@@ -4,7 +4,7 @@ GetMmdTransformationPlugin.dll
 ◆概要
 起動中の MikuMikuDance からモデルの変形状態を取得し、現在の一時モーションにコピーします。
 
-本ファイルは MikuMikuMoving 1.1.2.0 用のコマンドプラグインです。
+本ファイルは MikuMikuMoving 1.2.9.2 用のコマンドプラグインです。
 MikuMikuMoving については、以下の URL をご参照ください。
 http://sites.google.com/site/mikumikumoving/
 
@@ -24,6 +24,12 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 
 ◆更新履歴
+
+Version 0.7, Thu, 29 Dec 2022
+
+    全体的に書き直し
+    安定性を向上
+    プロセス一覧のプロジェクト名をファイル名のみ表示するよう変更
 
 Version 0.6, Sun, 24 Jul 2016
 

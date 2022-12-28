@@ -4,7 +4,7 @@ ApplyNoisePlugin.dll
 ◆概要
 選択されたキーフレームの座標や角度などへ指定量だけノイズを掛けます。
 
-本ファイルは MikuMikuMoving 1.1.2.0 用のコマンドプラグインです。
+本ファイルは MikuMikuMoving 1.2.9.2 用のコマンドプラグインです。
 MikuMikuMoving については、以下の URL をご参照ください。
 http://sites.google.com/site/mikumikumoving/
 
@@ -44,6 +44,12 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 
 ◆更新履歴
+
+Version 0.4, Thu, 29 Dec 2022
+
+    全体的に書き直し
+    適用処理を高速化
+    MMM 1.2.9.2 にて部分的なアンドゥに再度対応
 
 Version 0.3, Sun, 14 Sep 2014
 

@@ -9,6 +9,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <Configurations>Debug;Release</Configurations>
+    <Version>0.5</Version>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="SetMmdTransformationPlugin.txt">

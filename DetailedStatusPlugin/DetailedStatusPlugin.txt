@@ -4,7 +4,7 @@ DetailedStatusPlugin.dll
 ◆概要
 選択されたボーンの移動量や回転角度を小数点以下 6 桁まで表示します。
 
-本ファイルは MikuMikuMoving 1.1.0.0 用の常駐プラグインです。
+本ファイルは MikuMikuMoving 1.2.9.2 用の常駐プラグインです。
 MikuMikuMoving については、以下の URL をご参照ください。
 http://sites.google.com/site/mikumikumoving/
 
@@ -19,6 +19,12 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 
 ◆更新履歴
+
+Version 0.5, Thu, 29 Dec 2022
+
+    全体的に書き直し
+    適用処理を高速化
+    MMM 1.2.9.2 にて部分的なアンドゥに再度対応
 
 Version 0.4, Mon, 06 Aug 2012
 

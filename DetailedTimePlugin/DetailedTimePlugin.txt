@@ -4,7 +4,7 @@ DetailedTimePlugin.dll
 ◆概要
 現在のフレームを時刻、小節で表示します。
 
-本ファイルは MikuMikuMoving 1.1.2.0 用の常駐プラグインです。
+本ファイルは MikuMikuMoving 1.2.9.2 用の常駐プラグインです。
 MikuMikuMoving については、以下の URL をご参照ください。
 http://sites.google.com/site/mikumikumoving/
 
@@ -25,6 +25,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 
 ◆更新履歴
+
+Version 0.3, Thu, 29 Dec 2022
+
+    全体的に書き直し
 
 Version 0.2, Sat, 06 Dec 2012
 
