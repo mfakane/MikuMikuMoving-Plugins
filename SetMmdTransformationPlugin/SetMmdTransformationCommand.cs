@@ -16,7 +16,7 @@ public class SetMmdTransformationCommand : CommandBase
 {
 	public override void Run(CommandArgs e)
 	{
-		var mmdProcesses = Process.GetProcessesByName("MikuMikuDance");
+		var mmdProcesses = Process.GetProcessesByName("MikuMikuDance").Concat(Process.GetProcessesByName("NexGiMa")).ToArray();
 
 		e.Cancel = true;
 
