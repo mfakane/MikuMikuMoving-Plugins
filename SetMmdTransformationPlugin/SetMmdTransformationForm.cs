@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Mmd;
 
 namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin;
 
 public partial class SetMmdTransformationForm : Form
 {
-	readonly IList<Process> mmdInstances;
+	readonly IReadOnlyList<MmdDropTarget> mmdInstances;
 
-	public Process SelectedMmdInstance => mmdInstances[mmdComboBox.SelectedIndex];
+	public MmdDropTarget SelectedMmdInstance => mmdInstances[mmdComboBox.SelectedIndex];
 
 	public bool ChangedBonesOnly => changedBonesOnlyCheckBox.Checked;
 
-	public SetMmdTransformationForm(string language, IList<Process> mmdInstances)
+	public SetMmdTransformationForm(string language, IReadOnlyList<MmdDropTarget> mmdInstances)
 	{
 		InitializeComponent();
 		Font = SystemFonts.MessageBoxFont;
 		this.mmdInstances = mmdInstances;
 
-		mmdComboBox.Items.AddRange(mmdInstances.Select(x => "[PID: " + x.Id + "] " + GetProjectName(x)).Cast<object>().ToArray());
+		mmdComboBox.Items.AddRange(mmdInstances.Select(x => "[PID: " + x.Id + "] " + x.ProjectName).Cast<object>().ToArray());
 		mmdComboBox.SelectedIndex = 0;
 
 		if (language != "ja")
@@ -33,24 +32,6 @@ public partial class SetMmdTransformationForm : Form
 			okButton.Text = "Apply";
 			cancelButton.Text = "Cancel";
 		}
-	}
-
-	static string GetProjectName(Process process)
-	{
-		var title = process.MainWindowTitle;
-		var beginIndex = title.IndexOf(" [", StringComparison.Ordinal);
-		var endIndex = title.LastIndexOf("]", StringComparison.Ordinal);
-
-		if (beginIndex == -1 || endIndex == -1) return "(無題のプロジェクト)";
-		
-		beginIndex += 2;
-		
-		var fileName = title.Substring(beginIndex, endIndex - beginIndex);
-
-		if (fileName.Contains(Path.DirectorySeparatorChar))
-			fileName = Path.GetFileName(fileName);
-			
-		return fileName;
 	}
 
 	void mmdComboBox_SelectedIndexChanged(object sender, EventArgs e)

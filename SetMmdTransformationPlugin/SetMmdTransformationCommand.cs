@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 using Linearstar.Keystone.IO.MikuMikuDance;
 using Linearstar.MikuMikuMoving.Framework;
+using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Mmd;
 using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Transform;
 using MikuMikuPlugin;
 
@@ -16,7 +16,7 @@ public class SetMmdTransformationCommand : CommandBase
 {
 	public override void Run(CommandArgs e)
 	{
-		var mmdProcesses = Process.GetProcessesByName("MikuMikuDance").Concat(Process.GetProcessesByName("NexGiMa")).ToArray();
+		var mmdProcesses = MmdDropTarget.GetTargetProcesses();
 
 		e.Cancel = true;
 
@@ -61,6 +61,7 @@ public class SetMmdTransformationCommand : CommandBase
 			if (f.ShowDialog(ApplicationForm) != DialogResult.OK)
 				return;
 
+			var selectedInstance = f.SelectedMmdInstance;
 			TempFile? vpdFile = null;
 			TempFile? vmdFile = null;
 			
@@ -71,7 +72,7 @@ public class SetMmdTransformationCommand : CommandBase
 
 				var vpdString = vpdDocument.GetFormattedText();
 
-				vpdFile = new TempFile($"TempPose{f.SelectedMmdInstance.Id}_{Environment.TickCount}.vpd");
+				vpdFile = new TempFile($"TempPose{selectedInstance.Id}_{Environment.TickCount}.vpd");
 				File.WriteAllText(vpdFile.FileName, vpdString, VpdDocument.Encoding);
 			}
 
@@ -85,7 +86,7 @@ public class SetMmdTransformationCommand : CommandBase
 				var vmdDocument = new VmdDocument();
 				transformer.WriteTo(vmdDocument, minFrame, maxFrame);
 
-				vmdFile = new TempFile($"TempMotion{f.SelectedMmdInstance.Id}_{Environment.TickCount}.vmd");
+				vmdFile = new TempFile($"TempMotion{selectedInstance.Id}_{Environment.TickCount}.vmd");
 
 				using var stream = File.OpenWrite(vmdFile.FileName);
 				
@@ -93,10 +94,10 @@ public class SetMmdTransformationCommand : CommandBase
 			}
 
 			if (vmdFile != null)
-				MmdDrop.DropFile(f.SelectedMmdInstance.MainWindowHandle, vmdFile.FileName);
+				selectedInstance.PerformDrop(vmdFile.FileName);
 
 			if (vpdFile != null)
-				MmdDrop.DropFile(f.SelectedMmdInstance.MainWindowHandle, vpdFile.FileName);
+				selectedInstance.PerformDrop(vpdFile.FileName);
 		}
 		finally
 		{
