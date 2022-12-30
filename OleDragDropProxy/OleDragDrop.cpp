@@ -6,7 +6,7 @@ typedef struct tagPerformOleDragDropArgs
     LPCWSTR lpFileName;
 } PerformOleDragDropArgs;
 
-extern "C" HRESULT GetUIObjectOfFile(HWND hwnd, LPCWSTR pszPath, REFIID riid, void** ppv)
+HRESULT GetUIObjectOfFile(HWND hwnd, LPCWSTR pszPath, REFIID riid, void** ppv)
 {
     *ppv = nullptr;
     HRESULT hr;
@@ -32,7 +32,7 @@ extern "C" __declspec(dllexport) HRESULT WINAPI PerformOleDragDrop(PerformOleDra
     const auto hWnd = lpParameter->hWnd;
     const auto lpFileName = lpParameter->lpFileName;
 
-    CoInitialize(nullptr);
+    OleInitialize(nullptr);
 
     const auto pUnk = static_cast<IUnknown*>(GetProp(hWnd, TEXT("OleDropTargetInterface")));
     if (!pUnk) return E_FAIL;
@@ -66,7 +66,7 @@ extern "C" __declspec(dllexport) HRESULT WINAPI PerformOleDragDrop(PerformOleDra
         pDropTarget->Release();
     }
 
-    CoUninitialize();
+    OleUninitialize();
 
     return hr;
 }
