@@ -36,7 +36,8 @@ public abstract class KeyFrameTransformer<T> : ITransformer
 
     IEnumerable<T> GetAppliedKeyFrames(NoiseContext context, bool translateByLocal, bool rotateByLocal)
     {
-        var existingKeyFrames = keyFrames.ToDictionary(x => x.FrameNumber);
+        // 時折フレーム番号が重複していることがあるので ToLookup してから最初に出現したもののみ取り扱う
+        var existingKeyFrames = keyFrames.ToLookup(x => x.FrameNumber).ToDictionary(x => x.Key, x => x.First());
         var noiseValues = context.GetNoiseValues(new HashSet<long>(existingKeyFrames.Keys));
         var newKeyFrames = new Dictionary<long, T>();
 
