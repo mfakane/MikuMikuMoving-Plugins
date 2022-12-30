@@ -29,11 +29,11 @@ Version 0.2, Thu, 29 Dec 2022
 
 Version 0.1, Sun, 14 Sep 2014
 
-	MMM 本体の変更に伴いアンドゥ非対応化
+    MMM 本体の変更に伴いアンドゥ非対応化
 
 Version 0.0, Thu, 04 Oct 2012
 
-	製作
+    製作
 
 
 ----

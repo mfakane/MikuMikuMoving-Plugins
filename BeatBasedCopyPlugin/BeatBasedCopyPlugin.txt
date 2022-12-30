@@ -42,15 +42,15 @@ Version 0.3, Thu, 29 Dec 2022
 
 Version 0.2, Sun, 14 Sep 2014
 
-	MMM 本体の変更に伴いアンドゥ非対応化
+    MMM 本体の変更に伴いアンドゥ非対応化
 
 Version 0.1, Mon, 17 Sep 2012
 
-	新しいアンドゥスタックに対応
+    新しいアンドゥスタックに対応
 
 Version 0.0, Sun, 05 Aug 2012
 
-	製作
+    製作
 
 
 ----
