@@ -48,6 +48,7 @@ public abstract class KeyFrameTransformer<T> : ITransformer
 
             ApplyNoiseToKeyFrame(newKeyFrame, value.Value, translateByLocal, rotateByLocal);
             newKeyFrame.FrameNumber = value.ShiftedFrameNumber;
+            newKeyFrame.Selected = true;
             
             newKeyFrames[newKeyFrame.FrameNumber] = newKeyFrame;
             existingKeyFrames.Remove(value.FrameNumber);

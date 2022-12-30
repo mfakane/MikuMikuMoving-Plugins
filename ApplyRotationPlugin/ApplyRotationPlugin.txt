@@ -38,6 +38,10 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
+Version 0.8, Sat, 31 Dec 2022
+
+    アンドゥ処理の安定性向上
+
 Version 0.7, Thu, 29 Dec 2022
 
     全体的に書き直し
