@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveScreenImage2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveTextImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\PluginBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\ProcessExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\QuaternionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\ResidentBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\SceneExtensions.cs" />

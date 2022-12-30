@@ -16,6 +16,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetMmdTransformationPlugin"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetMmdTransformationPlugin", "SetMmdTransformationPlugin\SetMmdTransformationPlugin.csproj", "{50CF0299-37D5-4301-BBCE-E3A551EB772D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C} = {29EDD9B2-8868-4D79-A527-192F66F1C04C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GetMmdTransformationProxy", "GetMmdTransformationProxy\GetMmdTransformationProxy.vcxproj", "{7D5F15D3-4A4A-44E7-B8A8-A3A85AE14819}"
 EndProject
@@ -42,6 +45,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetMmdTransformationContain
 	EndProjectSection
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PluginFramework", "PluginFramework\PluginFramework.shproj", "{EA43785B-3937-4ECA-85DD-EB7E7E0DB416}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OleDragDrop", "OleDragDrop\OleDragDrop.csproj", "{29EDD9B2-8868-4D79-A527-192F66F1C04C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{200E3416-22AD-4B34-BADC-3A964888BDDD} = {200E3416-22AD-4B34-BADC-3A964888BDDD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OleDragDropProxy", "OleDragDropProxy\OleDragDropProxy.vcxproj", "{200E3416-22AD-4B34-BADC-3A964888BDDD}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "InteropFramework", "InteropFramework\InteropFramework.shproj", "{A035AFA1-4440-4F11-8077-E2172733C425}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +121,22 @@ Global
 		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Release|x86.Build.0 = Release|x86
 		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|x86.ActiveCfg = Debug|x86
 		{8DC503A7-C9C6-4CED-B0B5-8A15D72F73C3}.Debug|x86.Build.0 = Debug|x86
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Debug|x64.ActiveCfg = Debug|x64
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Debug|x64.Build.0 = Debug|x64
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Debug|x86.ActiveCfg = Debug|x86
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Debug|x86.Build.0 = Debug|x86
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Release|x64.ActiveCfg = Release|x64
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Release|x64.Build.0 = Release|x64
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Release|x86.ActiveCfg = Release|x86
+		{29EDD9B2-8868-4D79-A527-192F66F1C04C}.Release|x86.Build.0 = Release|x86
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Debug|x64.ActiveCfg = Debug|x64
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Debug|x64.Build.0 = Debug|x64
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Debug|x86.ActiveCfg = Debug|Win32
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Debug|x86.Build.0 = Debug|Win32
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Release|x64.ActiveCfg = Release|x64
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Release|x64.Build.0 = Release|x64
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Release|x86.ActiveCfg = Release|Win32
+		{200E3416-22AD-4B34-BADC-3A964888BDDD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,6 +17,12 @@
     </Content>
     <EmbeddedResource Include="Resources\SetMmdTransformation20.png" LogicalName="Icon20" />
     <EmbeddedResource Include="Resources\SetMmdTransformation32.png" LogicalName="Icon32" />
+    <EmbeddedResource Include="..\OleDragDrop\bin\x86\$(Configuration)\$(TargetFramework)\OleDragDrop.exe" LogicalName="OleDragDrop">
+      <Link>Resources\OleDragDrop.exe</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OleDragDrop\bin\x64\$(Configuration)\$(TargetFramework)\OleDragDrop.exe" LogicalName="OleDragDrop64">
+      <Link>Resources\OleDragDrop64.exe</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="..\PluginFramework\PluginFramework.projitems" Label="Shared" />
 </Project>

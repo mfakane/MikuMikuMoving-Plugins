@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Mmd;
+using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Interop;
 
 namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin;
 

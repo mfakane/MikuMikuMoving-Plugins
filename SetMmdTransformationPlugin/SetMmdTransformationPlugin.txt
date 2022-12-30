@@ -34,11 +34,13 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 
 ◆更新履歴
 
-Version 0.5, Thu, 29 Dec 2022
+Version 0.5, Fri, 30 Dec 2022
 
     全体的に書き直し
     安定性を向上
     プロセス一覧のプロジェクト名をファイル名のみ表示するよう変更
+    NexGiMa への送信に対応
+    PmxEditor への送信に対応
 
 Version 0.4, Mon, 21 Oct 2012
 

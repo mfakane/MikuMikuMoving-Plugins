@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net461</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <RootNamespace>Linearstar.MikuMikuMoving.OleDragDrop</RootNamespace>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <Platforms>x86;x64</Platforms>
+        <AssemblyName>OleDragDrop</AssemblyName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Condition="'$(Platform)' == 'x86'" Include="..\OleDragDropProxy\bin\Win32\$(Configuration)\OleDragDropProxy.dll" LogicalName="OleDragDropProxy">
+            <Link>Resources\OleDragDropProxy.dll</Link>
+        </EmbeddedResource>
+        <EmbeddedResource Condition="'$(Platform)' == 'x64'" Include="..\OleDragDropProxy\bin\x64\$(Configuration)\OleDragDropProxy.dll" LogicalName="OleDragDropProxy">
+            <Link>Resources\OleDragDropProxy.dll</Link>
+        </EmbeddedResource>
+    </ItemGroup>
+    <Import Project="..\InteropFramework\InteropFramework.projitems" Label="Shared" />
+</Project>

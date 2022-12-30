@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Mmd;
+namespace Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Interop;
 
 public class MmdDropTarget : IDisposable
 {
@@ -44,8 +44,8 @@ public class MmdDropTarget : IDisposable
         Process.GetProcessesByName(MikuMikuDanceProcessName)
             .Concat(Process.GetProcessesByName(NexGiMaProcessName))
             // TODO: PmxEditor はそのうちサポートしたい
-            //.Concat(Process.GetProcessesByName(PmxEditorProcessName))
-            //.Concat(Process.GetProcessesByName(PmxEditor64ProcessName))
+            .Concat(Process.GetProcessesByName(PmxEditorProcessName))
+            .Concat(Process.GetProcessesByName(PmxEditor64ProcessName))
             .Select(x => new MmdDropTarget(x))
             .ToArray();
 
@@ -162,12 +162,40 @@ public class MmdDropTarget : IDisposable
             };
     }
 
-    public void PerformDrop(string fileName)
+    public void DoDragDrop(string? vpdFileName, string? vmdFileName)
     {
-        if (BaseProcess.HasExited) return;
+        if (BaseProcess.HasExited || vmdFileName == null && vpdFileName == null) return;
+       
+        var targetWindowHandle = GetTargetWindowHandle();
         
-        // TODO: PmxEditor は WM_DROPFILES 対応してないのでそのうち OLE 対応したい
-        MmdDrop.DropFile(GetTargetWindowHandle(), fileName);
+        switch (Kind)
+        {
+            case MmdDropTargetKind.PmxEditor:
+            case MmdDropTargetKind.PmxEditor64:
+            {
+                var dragDropHelper = new OleDragDrop();
+                
+                if (vmdFileName != null)
+                    dragDropHelper.DoDragDrop(targetWindowHandle, vmdFileName);
+                
+                if (vpdFileName != null)
+                    dragDropHelper.DoDragDrop(targetWindowHandle, vpdFileName);
+
+                break;
+            }
+            default:
+            {
+                var dragDropHelper = new WmDropFiles();
+                
+                if (vmdFileName != null)
+                    dragDropHelper.DoDragDrop(targetWindowHandle, vmdFileName);
+                
+                if (vpdFileName != null)
+                    dragDropHelper.DoDragDrop(targetWindowHandle, vpdFileName);
+         
+                break;
+            }
+        }
     }
 
     public void Dispose() => 

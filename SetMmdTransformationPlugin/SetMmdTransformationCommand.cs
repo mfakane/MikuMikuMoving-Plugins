@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using JetBrains.Annotations;
 using Linearstar.Keystone.IO.MikuMikuDance;
 using Linearstar.MikuMikuMoving.Framework;
-using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Mmd;
+using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Interop;
 using Linearstar.MikuMikuMoving.SetMmdTransformationPlugin.Transform;
 using MikuMikuPlugin;
 
@@ -93,11 +93,7 @@ public class SetMmdTransformationCommand : CommandBase
 				vmdDocument.Write(stream);
 			}
 
-			if (vmdFile != null)
-				selectedInstance.PerformDrop(vmdFile.FileName);
-
-			if (vpdFile != null)
-				selectedInstance.PerformDrop(vpdFile.FileName);
+			selectedInstance.DoDragDrop(vpdFile?.FileName, vmdFile?.FileName);
 		}
 		finally
 		{
