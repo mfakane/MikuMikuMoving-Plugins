@@ -15,13 +15,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CompilerServices\IsExternalInit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\CameraLayerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\CommandBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Controls\IncrementSelectionNumericUpDown.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Dialogs\SelectBoneDialog.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\EffectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\ExposedObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\MathHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Framework\MotionLayerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveScreenImage2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\NonInteractiveTextImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Framework\PluginBase.cs" />

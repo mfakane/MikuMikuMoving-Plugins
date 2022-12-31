@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using MikuMikuPlugin;
 
 namespace Linearstar.MikuMikuMoving.Framework;
@@ -50,51 +51,103 @@ public static class SceneExtensions
 	    {
 		    foreach (var model in scene.Models)
 		    foreach (var layer in model.Bones.SelectMany(x => x.Layers))
-			    yield return KeyFrameBuffer.Create(layer.Frames.GetKeyFrames(), layer.Frames.ReplaceAllKeyFrames);
+			    yield return KeyFrameBuffer.Create(
+				    layer.Frames.GetKeyFrames(),
+				    layer.Frames.ReplaceAllKeyFrames,
+				    layer.Selected,
+				    x =>
+				    {
+					    if (layer.Selected == x) return;
+					    layer.Selected = x;
+				    }
+			    );
 
 		    foreach (var layer in scene.Accessories.SelectMany(x => x.Layers))
-			    yield return KeyFrameBuffer.Create(layer.Frames.GetKeyFrames(), layer.Frames.ReplaceAllKeyFrames);
+			    yield return KeyFrameBuffer.Create(
+				    layer.Frames.GetKeyFrames(),
+				    layer.Frames.ReplaceAllKeyFrames,
+				    layer.GetSelected(),
+				    x => layer.SetSelected(x)
+			    );
 
 		    foreach (var effect in scene.Effects)
-			    yield return KeyFrameBuffer.Create(effect.Frames.GetKeyFrames(), effect.Frames.ReplaceAllKeyFrames);
+			    yield return KeyFrameBuffer.Create(
+				    effect.Frames.GetKeyFrames(),
+				    effect.Frames.ReplaceAllKeyFrames,
+				    effect.GetSelected(),
+				    x => effect.SetSelected(x)
+				);
 
 		    foreach (var light in scene.Lights)
 			    yield return KeyFrameBuffer.Create(light.Frames.GetKeyFrames(), light.Frames.ReplaceAllKeyFrames);
 
 		    foreach (var layer in scene.Cameras.SelectMany(x => x.Layers))
-			    yield return KeyFrameBuffer.Create(layer.Frames.GetKeyFrames(), layer.Frames.ReplaceAllKeyFrames);
+			    yield return KeyFrameBuffer.Create(
+				    layer.Frames.GetKeyFrames(),
+				    layer.Frames.ReplaceAllKeyFrames,
+				    layer.GetSelected(),
+				    x => layer.SetSelected(x)
+				);
 	    }
 
 	    void PrepareUndo()
 	    {
+		    if (controller?.ActiveObject == null) return;
+
 		    var buffers = GetKeyFrameBuffers().ToArray();
 
-		    if (recordAll) foreach (var buffer in buffers) buffer.SelectAll();
-		    controller?.ActiveObject.AddSelectedToRemoveFrameData();
+		    foreach (var buffer in buffers)
+		    {
+			    if (recordAll)
+					buffer.SelectAll();
+			    else
+				    buffer.SelectIfNeeded();
+		    }
+		    
+		    controller.ActiveObject.AddSelectedToRemoveFrameData();
 
-		    if (recordAll) foreach (var buffer in buffers) buffer.RestoreSelection();
+		    if (recordAll)
+			    foreach (var buffer in buffers)
+				    buffer.RestoreSelection();
 	    }
 
 	    void Commit()
 	    {
+		    if (controller?.ActiveObject == null) return;
+		    
 		    var buffers = GetKeyFrameBuffers().ToArray();
 
-		    if (recordAll) foreach (var buffer in buffers) buffer.SelectAll();
-		    controller?.ActiveObject.AddSelectedToAddFrameData();
+		    foreach (var buffer in buffers)
+		    {
+			    if (recordAll)
+				    buffer.SelectAll();
+			    else
+				    buffer.SelectIfNeeded();
+		    }
+		    
+		    controller.ActiveObject.AddSelectedToAddFrameData();
+		    controller.UndoSystem.PushUndo();
 
-		    if (recordAll) foreach (var buffer in buffers) buffer.RestoreSelection();
-		    controller?.UndoSystem.PushUndo();
+		    if (recordAll)
+				foreach (var buffer in buffers)
+					buffer.RestoreSelection();
 	    }
 
 	    interface IKeyFrameBuffer
 	    {
+		    void SelectIfNeeded();
 		    void SelectAll();
 		    void RestoreSelection();
 	    }
 
 	    static class KeyFrameBuffer
 	    {
-		    public static KeyFrameBuffer<T> Create<T>(List<T> originalKeyFrames, Action<List<T>> replaceAllKeyFrames)
+		    public static KeyFrameBuffer<T> Create<T>(
+			    List<T> originalKeyFrames,
+			    Action<List<T>> replaceAllKeyFrames,
+			    bool? isOwnerOriginallySelected = null,
+			    Action<bool>? setOwnerSelected = null
+		    )
 			    where T : FrameData =>
 			    new(
 				    originalKeyFrames,
@@ -104,19 +157,38 @@ public static class SceneExtensions
 					    frameData.Selected = true;
 					    return frameData;
 				    }).ToList(),
-				    replaceAllKeyFrames
+				    replaceAllKeyFrames,
+				    isOwnerOriginallySelected,
+				    setOwnerSelected
 			    );
 	    }
 
 	    readonly record struct KeyFrameBuffer<T>(
 		    List<T> OriginalKeyFrames,
 		    List<T> SelectedKeyFrames,
-		    Action<List<T>> ReplaceAllKeyFrames
+		    Action<List<T>> ReplaceAllKeyFrames,
+		    bool? IsOwnerOriginallySelected,
+		    Action<bool>? SetOwnerSelected
 	    ) : IKeyFrameBuffer
 		    where T : FrameData
 	    {
-		    public void SelectAll() => ReplaceAllKeyFrames(SelectedKeyFrames);
-		    public void RestoreSelection() => ReplaceAllKeyFrames(OriginalKeyFrames);
+		    public void SelectIfNeeded()
+		    {
+			    if (IsOwnerOriginallySelected != true && OriginalKeyFrames.Any(x => x.Selected))
+					SetOwnerSelected?.Invoke(true);
+		    }
+
+		    public void SelectAll()
+		    {
+			    if (IsOwnerOriginallySelected.HasValue) SetOwnerSelected?.Invoke(true);
+			    ReplaceAllKeyFrames(SelectedKeyFrames);
+		    }
+
+		    public void RestoreSelection()
+		    {
+			    if (IsOwnerOriginallySelected.HasValue) SetOwnerSelected?.Invoke(IsOwnerOriginallySelected.Value);
+			    ReplaceAllKeyFrames(OriginalKeyFrames);
+		    }
 	    }
     }
 }
