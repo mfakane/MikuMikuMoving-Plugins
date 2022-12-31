@@ -8,13 +8,15 @@ public abstract class MotionTransformer : KeyFrameTransformer<MotionFrameData>
 {
     readonly Bone? bone;
     
+    public override bool CanApplyWeight => false;
+
     public MotionTransformer(Bone? bone, IReadOnlyCollection<MotionFrameData> keyFrames) 
         : base(keyFrames) =>
         this.bone = bone;
 
     protected abstract override void ReplaceAllKeyFrames(IEnumerable<MotionFrameData> keyFrames);
 
-    protected override void ApplyNoiseToKeyFrame(MotionFrameData keyFrame, NoiseValue value, bool translateByLocal, bool rotateByLocal)
+    protected override void ApplyNoiseToKeyFrame(MotionFrameData keyFrame, NoiseValue value, bool translateByLocal, bool rotateByLocal, bool applyWeight)
     {
         if (bone?.BoneFlags.HasFlag(BoneType.Rotate) != false)
             keyFrame.Quaternion = ApplyRotation(bone, keyFrame.Quaternion, value.Rotation, rotateByLocal);

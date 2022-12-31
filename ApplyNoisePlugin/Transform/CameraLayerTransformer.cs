@@ -11,6 +11,8 @@ public class CameraLayerTransformer : KeyFrameTransformer<CameraFrameData>
     public override bool CanTranslateByLocal => false;
 
     public override bool CanRotateByLocal => false;
+ 
+    public override bool CanApplyWeight => false;
     
     CameraLayerTransformer(CameraLayer layer)
         : base(layer.Frames.GetKeyFrames()) =>
@@ -28,7 +30,7 @@ public class CameraLayerTransformer : KeyFrameTransformer<CameraFrameData>
     protected override CameraFrameData GetFrame(long frameNumber) =>
         layer.Frames.GetFrame(frameNumber);
 
-    protected override void ApplyNoiseToKeyFrame(CameraFrameData keyFrame, NoiseValue value, bool translateByLocal, bool rotateByLocal)
+    protected override void ApplyNoiseToKeyFrame(CameraFrameData keyFrame, NoiseValue value, bool translateByLocal, bool rotateByLocal, bool applyWeight)
     {
         keyFrame.Position += value.Position;
         keyFrame.Angle += value.Rotation;

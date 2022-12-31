@@ -7,6 +7,7 @@ namespace Linearstar.MikuMikuMoving.ApplyNoisePlugin.Transform;
 public record NoiseValue(
     Vector3 Position,
     Vector3 Rotation,
+    float Weight,
     float Gravity,
     Vector3 GravityDirection
 )
@@ -15,6 +16,7 @@ public record NoiseValue(
         new(
             new(5),
             MathHelper.ToRadians(new Vector3(5)),
+            0.5f,
             10,
             new(1)
         );
@@ -33,6 +35,7 @@ public record NoiseValue(
         new(
             Random3(random, width.Position),
             Random3(random, width.Rotation),
+            Random(random, width.Weight),
             Random(random, width.Gravity),
             Random3(random, width.GravityDirection)
         );
@@ -41,6 +44,7 @@ public record NoiseValue(
         new(
             Vector3.Lerp(a.Position, b.Position, amount),
             Vector3.Lerp(a.Rotation, b.Rotation, amount),
+            MathHelper.Lerp(a.Weight, b.Weight, amount),
             MathHelper.Lerp(a.Gravity, b.Gravity, amount),
             Vector3.Lerp(a.GravityDirection, b.GravityDirection, amount)
         );

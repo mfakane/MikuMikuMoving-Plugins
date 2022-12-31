@@ -50,17 +50,31 @@ public static class SceneExtensions
 	    IEnumerable<IKeyFrameBuffer> GetKeyFrameBuffers()
 	    {
 		    foreach (var model in scene.Models)
-		    foreach (var layer in model.Bones.SelectMany(x => x.Layers))
-			    yield return KeyFrameBuffer.Create(
-				    layer.Frames.GetKeyFrames(),
-				    layer.Frames.ReplaceAllKeyFrames,
-				    layer.Selected,
-				    x =>
-				    {
-					    if (layer.Selected == x) return;
-					    layer.Selected = x;
-				    }
-			    );
+		    {
+			    foreach (var morph in model.Morphs)
+				    yield return KeyFrameBuffer.Create(
+					    morph.Frames.GetKeyFrames(),
+					    morph.Frames.ReplaceAllKeyFrames,
+					    morph.Selected,
+					    x =>
+					    {
+						    if (morph.Selected == x) return;
+						    morph.Selected = x;
+					    }
+				    );
+			    
+			    foreach (var layer in model.Bones.SelectMany(x => x.Layers))
+				    yield return KeyFrameBuffer.Create(
+					    layer.Frames.GetKeyFrames(),
+					    layer.Frames.ReplaceAllKeyFrames,
+					    layer.Selected,
+					    x =>
+					    {
+						    if (layer.Selected == x) return;
+						    layer.Selected = x;
+					    }
+				    );
+		    }
 
 		    foreach (var layer in scene.Accessories.SelectMany(x => x.Layers))
 			    yield return KeyFrameBuffer.Create(

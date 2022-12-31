@@ -24,6 +24,12 @@ public partial class ApplyNoiseForm : Form
 		set => rotationPanel.Visible = value;
 	}
 
+	public bool IsWeightEnabled
+	{
+		get => weightPanel.Visible;
+		set => weightPanel.Visible = value;
+	}
+	
 	public bool IsEnvironmentEnabled
 	{
 		get => environmentPanel.Visible;
@@ -42,6 +48,12 @@ public partial class ApplyNoiseForm : Form
 		set => noiseValueIntervalNumericUpDown.Value = value;
 	}
 
+	public bool NormalizeWeight
+	{
+		get => normalizeWeightCheckBox.Checked;
+		set => normalizeWeightCheckBox.Checked = value;
+	}
+
 	public int KeyShiftWidth
 	{
 		get => (int)keyShiftNoiseNumericUpDown.Value;
@@ -54,6 +66,7 @@ public partial class ApplyNoiseForm : Form
 			new(
 				new((float)positionXNumericUpDown.Value, (float)positionYNumericUpDown.Value, (float)positionZNumericUpDown.Value),
 				MathHelper.ToRadians(new Vector3((float)rotationXNumericUpDown.Value, (float)rotationYNumericUpDown.Value, (float)rotationZNumericUpDown.Value)),
+				(float)weightNumericUpDown.Value,
 				(float)gravityNumericUpDown.Value,
 				new((float)gravityXNumericUpDown.Value, (float)gravityYNumericUpDown.Value, (float)gravityZNumericUpDown.Value)
 			);
@@ -66,6 +79,7 @@ public partial class ApplyNoiseForm : Form
 			rotationXNumericUpDown.Value = (decimal)degrees.X;
 			rotationYNumericUpDown.Value = (decimal)degrees.Y;
 			rotationZNumericUpDown.Value = (decimal)degrees.Z;
+			weightNumericUpDown.Value = (decimal)value.Weight;
 			gravityNumericUpDown.Value = (decimal)value.Gravity;
 			gravityXNumericUpDown.Value = (decimal)value.GravityDirection.X;
 			gravityYNumericUpDown.Value = (decimal)value.GravityDirection.Y;
@@ -119,7 +133,7 @@ public partial class ApplyNoiseForm : Form
 		foreach (var i in controls)
 		{
 			var changing = false;
-			var isPercentage = new[] { "gravityXTrackBar", "gravityYTrackBar", "gravityZTrackBar" }.Contains(i.TrackBar.Name);
+			var isPercentage = new[] { "weightTrackBar", "gravityXTrackBar", "gravityYTrackBar", "gravityZTrackBar" }.Contains(i.TrackBar.Name);
 
 			i.TrackBar.ValueChanged += (sender, e) =>
 			{

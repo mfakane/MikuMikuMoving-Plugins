@@ -48,6 +48,7 @@ MikuMikuMoving.exe のあるフォルダの Plugins フォルダに本 dll を�
 Version 0.5, Sat, 31 Dec 2022
 
     アンドゥ処理の安定性向上
+    モーフへのノイズ付加に対応
 
 Version 0.4, Thu, 29 Dec 2022
 

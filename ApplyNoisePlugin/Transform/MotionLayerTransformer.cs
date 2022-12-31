@@ -11,8 +11,10 @@ public class MotionLayerTransformer : MotionTransformer
     
     public override bool CanTranslateByLocal => true;
 
-    public override bool CanRotateByLocal => bone?.BoneFlags.HasFlag(BoneType.Rotate) ?? false; 
-    
+    public override bool CanRotateByLocal => bone?.BoneFlags.HasFlag(BoneType.Rotate) ?? false;
+
+    public override bool CanApplyWeight => false;
+
     MotionLayerTransformer(Bone? bone, MotionLayer motionLayer)
         : base(bone, motionLayer.Frames.GetKeyFrames())
     {

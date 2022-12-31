@@ -8,5 +8,6 @@ public interface ITransformer
     bool CanTranslateByLocal { get; }
     bool CanApplyRotation { get; }
     bool CanRotateByLocal { get; }
-    void ApplyNoise(NoiseContext context, bool translateByLocal, bool rotateByLocal);
+    bool CanApplyWeight { get; }
+    void ApplyNoise(NoiseContext context, bool translateByLocal, bool rotateByLocal, bool normalizeWeight);
 }

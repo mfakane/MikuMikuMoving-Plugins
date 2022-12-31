@@ -16,13 +16,15 @@ public abstract class KeyFrameTransformer<T> : ITransformer
     public long? SelectedMaximumFrameNumber =>
         selectedKeyFrames.Any() ? selectedKeyFrames.Max(x => x.FrameNumber) : null;
 
-    public bool CanApplyTranslation => true;
+    public virtual bool CanApplyTranslation => true;
 
     public abstract bool CanTranslateByLocal { get; }
 
-    public bool CanApplyRotation => true;
+    public virtual bool CanApplyRotation => true;
 
     public abstract bool CanRotateByLocal { get; }
+    
+    public abstract bool CanApplyWeight { get; }
 
     protected KeyFrameTransformer(IReadOnlyCollection<T> keyFrames)
     {
@@ -32,9 +34,9 @@ public abstract class KeyFrameTransformer<T> : ITransformer
     
     protected abstract void ReplaceAllKeyFrames(IEnumerable<T> keyFrames);
     protected abstract T GetFrame(long frameNumber);
-    protected abstract void ApplyNoiseToKeyFrame(T keyFrame, NoiseValue value, bool translateByLocal, bool rotateByLocal);
+    protected abstract void ApplyNoiseToKeyFrame(T keyFrame, NoiseValue value, bool translateByLocal, bool rotateByLocal, bool normalizeWeight);
 
-    IEnumerable<T> GetAppliedKeyFrames(NoiseContext context, bool translateByLocal, bool rotateByLocal)
+    IEnumerable<T> GetAppliedKeyFrames(NoiseContext context, bool translateByLocal, bool rotateByLocal, bool normalizeWeight)
     {
         // 時折フレーム番号が重複していることがあるので ToLookup してから最初に出現したもののみ取り扱う
         var existingKeyFrames = keyFrames.ToLookup(x => x.FrameNumber).ToDictionary(x => x.Key, x => x.First());
@@ -47,7 +49,7 @@ public abstract class KeyFrameTransformer<T> : ITransformer
                 ? existingKeyFrame
                 : GetFrame(value.FrameNumber);
 
-            ApplyNoiseToKeyFrame(newKeyFrame, value.Value, translateByLocal, rotateByLocal);
+            ApplyNoiseToKeyFrame(newKeyFrame, value.Value, translateByLocal, rotateByLocal, normalizeWeight);
             newKeyFrame.FrameNumber = value.ShiftedFrameNumber;
             newKeyFrame.Selected = true;
             
@@ -62,6 +64,6 @@ public abstract class KeyFrameTransformer<T> : ITransformer
         return newKeyFrames.Values;
     }
 
-    public void ApplyNoise(NoiseContext context, bool translateByLocal, bool rotateByLocal) =>
-        ReplaceAllKeyFrames(GetAppliedKeyFrames(context, translateByLocal, rotateByLocal));
+    public void ApplyNoise(NoiseContext context, bool translateByLocal, bool rotateByLocal, bool normalizeWeight) =>
+        ReplaceAllKeyFrames(GetAppliedKeyFrames(context, translateByLocal, rotateByLocal, normalizeWeight));
 }

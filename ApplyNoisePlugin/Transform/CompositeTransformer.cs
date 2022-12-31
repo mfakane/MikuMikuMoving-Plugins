@@ -24,6 +24,9 @@ public class CompositeTransformer : ITransformer
 
     public bool CanRotateByLocal => 
         transformers.Any(x => x.CanRotateByLocal);
+    
+    public bool CanApplyWeight => 
+        transformers.Any(x => x.CanApplyWeight);
 
     CompositeTransformer(IReadOnlyCollection<ITransformer> transformers) =>
         this.transformers = transformers;
@@ -31,9 +34,9 @@ public class CompositeTransformer : ITransformer
     public static ITransformer? Create(IReadOnlyCollection<ITransformer> transformers) =>
         transformers.Any() ? new CompositeTransformer(transformers) : null;
     
-    public void ApplyNoise(NoiseContext context, bool translateByLocal, bool rotateByLocal)
+    public void ApplyNoise(NoiseContext context, bool translateByLocal, bool rotateByLocal, bool normalizeWeight)
     {
         foreach (var transformer in transformers)
-            transformer.ApplyNoise(context, translateByLocal, rotateByLocal);
+            transformer.ApplyNoise(context, translateByLocal, rotateByLocal, normalizeWeight);
     }
 }

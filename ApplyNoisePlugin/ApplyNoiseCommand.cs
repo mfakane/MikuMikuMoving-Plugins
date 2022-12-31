@@ -39,10 +39,12 @@ public class ApplyNoiseCommand : CommandBase
 			KeyShiftWidth = 0,
 			NoiseValueInterval = 5,
 			NoiseValue = NoiseValue.Default,
+			NormalizeWeight = true,
 			IsPositionEnabled = transformer.CanApplyTranslation,
 			IsPositionLocalVisible = transformer.CanTranslateByLocal,
 			IsRotationEnabled = transformer.CanApplyRotation,
 			IsRotationLocalVisible = transformer.CanRotateByLocal,
+			IsWeightEnabled = transformer.CanApplyWeight,
 			IsEnvironmentEnabled = false,
 			IsPositionLocal = transformer.CanRotateByLocal,
 			IsRotationLocal = transformer.CanRotateByLocal,
@@ -64,7 +66,7 @@ public class ApplyNoiseCommand : CommandBase
 		);
 
 		using (Scene.BeginUndoBlock())
-			transformer.ApplyNoise(context, f.IsPositionLocal, f.IsRotationLocal);
+			transformer.ApplyNoise(context, f.IsPositionLocal, f.IsRotationLocal, f.NormalizeWeight);
 	}
 
 	public override string Description => "選択したキーフレームの移動および回転値に指定したオフセットを与えます。";
